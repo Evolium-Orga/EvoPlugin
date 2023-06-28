@@ -3,7 +3,7 @@ package fr.palmus.evoplugin.api.player;
 import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.api.messages.Message;
 import fr.palmus.evoplugin.api.messages.PrefixLevel;
-import fr.palmus.evoplugin.economy.PlayerEconomy;
+import fr.palmus.evoplugin.economy.EvoEconomy;
 import fr.palmus.evoplugin.enumeration.Period;
 import fr.palmus.evoplugin.listeners.custom.PlayerExpChangeEvent;
 import fr.palmus.evoplugin.listeners.custom.PlayerPeriodChangeEvent;
@@ -35,7 +35,7 @@ public class EvoPlayer {
 
     private Period playerPeriod;
 
-    private final PlayerEconomy playerEconomy;
+    private final EvoEconomy playerEconomy;
 
     /**
      * Constructor for the EvoPlayer class.
@@ -45,7 +45,7 @@ public class EvoPlayer {
         this.player = pl;
         this.experience = main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".exp");
 
-        playerEconomy = main.getEconomyModule().getPlayerEcon(player);
+        playerEconomy = new EvoEconomy(pl);
         playerPeriod = main.getPeriodCaster().getEnumPeriodFromInt(main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".period"));
 
         playerToEvoplayerHashmap.put(pl, this);
@@ -74,13 +74,36 @@ public class EvoPlayer {
     }
 
     /**
+     * Retrieves the rank value of the player.
+     * @return The rank value.
+     */
+    public int getRank() {
+        if (EvoPlugin.getInstance().getPeriodConfigurationFile().get(player.getUniqueId() + ".rank") == null) {
+            return 0;
+        }
+
+        return EvoPlugin.getInstance().getPeriodConfigurationFile().getInt(player.getUniqueId() + ".rank");
+    }
+
+    /**
      * Adds experience points to the player.
      * @param exp The amount of experience points to add.
      */
     public void addExp(int exp) {
         experience = experience + exp;
 
-        PlayerExpChangeEvent event = new PlayerExpChangeEvent(player, experience, ExpAction.ADD, main);
+        PlayerExpChangeEvent event;
+
+        if(exp > 0) {
+            event = new PlayerExpChangeEvent(player, experience, ExpAction.ADD, main);
+        }
+
+        if(exp < 0) {
+            event = new PlayerExpChangeEvent(player, experience, ExpAction.SUBTRACT, main);;
+        }else{
+            return;
+        }
+
         Bukkit.getServer().getPluginManager().callEvent(event);
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§5§kII§r §d+§5" + exp + " §davancement: §5" + getExp() + "§7/§5" + main.getPeriodCaster().getFormattedPeriodExpLimit(getRank()) + " §r§5§kII"));
     }
@@ -151,18 +174,6 @@ public class EvoPlayer {
         playerPeriod = Period.PREHISTOIRE;
         PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.RESET, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
-    }
-
-    /**
-     * Retrieves the rank value of the player.
-     * @return The rank value.
-     */
-    public int getRank() {
-        if (EvoPlugin.getInstance().getPeriodConfigurationFile().get(player.getUniqueId() + ".rank") == null) {
-            return 0;
-        }
-
-        return EvoPlugin.getInstance().getPeriodConfigurationFile().getInt(player.getUniqueId() + ".rank");
     }
 
     /**
@@ -256,11 +267,11 @@ public class EvoPlayer {
         if (getRank() == 3) {
             stringedPeriod = main.getPeriodCaster().getPeriodToString(Period.getNextPeriod(playerPeriod)) + " I";
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§2UPGRADE §2: §a" + getEntirePeriodStyle() + "§2 >> §a" + main.getPeriodCaster().getPeriodToString(Period.getNextPeriod(playerPeriod)) + "I"));
-            playerEconomy.addMoney(10000);
+            getEconomy().addMoney(10000);
         } else {
             stringedPeriod = getEntirePeriodStyle() + "I";
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§2UPGRADE §2: §a" + getEntirePeriodStyle() + "§2 >> §a" + getEntirePeriodStyle() + "I"));
-            playerEconomy.addMoney(5000);
+            getEconomy().addMoney(5000);
         }
 
         player.sendTitle("§a" + stringedPeriod, "§2---------------", 20, 60, 20);
@@ -293,5 +304,14 @@ public class EvoPlayer {
 
     public int getProgressPercent() {
         return this.getExp() * 100 / main.getPeriodCaster().getPeriodExpLimit(this.getRank());
+    }
+
+    /**
+     * Retrieves the player's economy instance to manage his money.
+     *
+     * @return The PlayerEconomy instance of the player.
+     */
+    public EvoEconomy getEconomy() {
+        return playerEconomy;
     }
 }

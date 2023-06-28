@@ -1,0 +1,249 @@
+Index: src/main/java/fr/palmus/evoplugin/economy/Economy.java
+===================================================================
+diff --git a/src/main/java/fr/palmus/evoplugin/economy/Economy.java b/src/main/java/fr/palmus/evoplugin/economy/Economy.java
+deleted file mode 100644
+--- a/src/main/java/fr/palmus/evoplugin/economy/Economy.java	(revision cd0b66cab5765cab0622650e4f000e002d52d62f)
++++ /dev/null	(revision cd0b66cab5765cab0622650e4f000e002d52d62f)
+@@ -1,64 +0,0 @@
+-package fr.palmus.evoplugin.economy;
+-
+-import fr.palmus.evoplugin.EvoPlugin;
+-import org.bukkit.Bukkit;
+-import org.bukkit.ChatColor;
+-import org.bukkit.configuration.file.FileConfiguration;
+-import org.bukkit.configuration.file.YamlConfiguration;
+-import org.bukkit.entity.Player;
+-
+-import java.io.File;
+-import java.io.IOException;
+-import java.util.HashMap;
+-import java.util.logging.Level;
+-
+-public class Economy {
+-
+-    EvoPlugin main;
+-
+-    public File file;
+-    public FileConfiguration cfg;
+-
+-    public HashMap<Player, PlayerEconomy> econManagement;
+-
+-    public Economy(EvoPlugin main){
+-        this.main = main;
+-        setup();
+-        main.getCustomLogger().debug(ChatColor.GREEN + "Economy module successfully loadStringConfig !");
+-    }
+-
+-    public void setup(){
+-        main.getCustomLogger().debug(ChatColor.GOLD + "Starting Economy module...");
+-        if (file == null) {
+-            file = new File("plugins/EvoPlugin", "economy.yml");
+-        }
+-        if (!file.exists()) {
+-            main.saveResource("economy.yml", false);
+-        }
+-        cfg = YamlConfiguration.loadConfiguration(file);
+-        main.getCustomLogger().debug(ChatColor.GOLD + "Economy config files loaded");
+-        econManagement = new HashMap<>();
+-        main.getCustomLogger().debug(ChatColor.GOLD + "Economy storage loaded");
+-    }
+-
+-    public PlayerEconomy getPlayerEcon(Player pl){
+-        return econManagement.get(pl);
+-    }
+-
+-    public void initPlayerEcon(Player pl) {
+-
+-        if(!cfg.contains(pl.getDisplayName())){
+-            cfg.set(pl.getUniqueId() + ".money", 0);
+-            cfg.set(pl.getUniqueId() + ".bank", 0);
+-
+-            try {
+-                cfg.save(this.file);
+-            } catch (IOException e) {
+-                e.printStackTrace();
+-                main.getCustomLogger().log(ChatColor.RED + "Failed to save money of player '" + pl.getDisplayName() + "' shutting down the server");
+-                Bukkit.shutdown();
+-            }
+-        }
+-        econManagement.put(pl, new PlayerEconomy(pl, this));
+-    }
+-}
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+new file mode 100644
+--- /dev/null	(date 1687910187199)
++++ b/.idea/gradle.xml	(date 1687910187199)
+@@ -0,0 +1,17 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
++  <component name="GradleSettings">
++    <option name="linkedExternalProjectsSettings">
++      <GradleProjectSettings>
++        <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="gradleJvm" value="17" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++          </set>
++        </option>
++      </GradleProjectSettings>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	(date 1687908938954)
++++ b/.idea/jarRepositories.xml	(date 1687908938954)
+@@ -0,0 +1,45 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="maven4" />
++      <option name="name" value="maven4" />
++      <option name="url" value="https://repo.extendedclip.com/content/repositories/placeholderapi/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="maven2" />
++      <option name="name" value="maven2" />
++      <option name="url" value="https://oss.sonatype.org/content/repositories/snapshots" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenRepo" />
++      <option name="name" value="MavenRepo" />
++      <option name="url" value="https://repo.maven.apache.org/maven2/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenLocal" />
++      <option name="name" value="MavenLocal" />
++      <option name="url" value="file:/$MAVEN_REPOSITORY$/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="maven" />
++      <option name="name" value="maven" />
++      <option name="url" value="https://hub.spigotmc.org/nexus/content/repositories/snapshots/" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="maven3" />
++      <option name="name" value="maven3" />
++      <option name="url" value="https://oss.sonatype.org/content/repositories/central" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+new file mode 100644
+--- /dev/null	(date 1687910748563)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1687910748563)
+@@ -0,0 +1,8 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="AutoCloseableResource" enabled="true" level="WARNING" enabled_by_default="true">
++      <option name="METHOD_MATCHER_CONFIG" value="java.util.Formatter,format,java.io.Writer,append,com.google.common.base.Preconditions,checkNotNull,org.hibernate.Session,close,java.io.PrintWriter,printf,java.io.PrintStream,printf,net.luckperms.api.event.EventBus,subscribe" />
++    </inspection_tool>
++  </profile>
++</component>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1687908938925)
++++ b/.idea/misc.xml	(date 1687908938925)
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="EntryPointsManager">
++    <list size="1">
++      <item index="0" class="java.lang.String" itemvalue="org.bukkit.event.EventHandler" />
++    </list>
++  </component>
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK" />
++</project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	(date 1687908915167)
++++ b/.idea/compiler.xml	(date 1687908915167)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="17" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/vcs.xml b/.idea/vcs.xml
+new file mode 100644
+--- /dev/null	(date 1687908878552)
++++ b/.idea/vcs.xml	(date 1687908878552)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+new file mode 100644
+--- /dev/null	(date 1687908938904)
++++ b/.idea/modules.xml	(date 1687908938904)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ProjectModuleManager">
++    <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/EvoPlugin.main.iml" filepath="$PROJECT_DIR$/.idea/modules/EvoPlugin.main.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/EvoPlugin.test.iml" filepath="$PROJECT_DIR$/.idea/modules/EvoPlugin.test.iml" />
++    </modules>
++  </component>
++</project>
+\ No newline at end of file

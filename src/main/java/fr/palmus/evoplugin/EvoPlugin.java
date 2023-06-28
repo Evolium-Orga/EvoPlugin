@@ -2,8 +2,8 @@ package fr.palmus.evoplugin;
 
 import fr.palmus.evoplugin.commands.*;
 import fr.palmus.evoplugin.commands.completer.ExpCompleter;
+import fr.palmus.evoplugin.economy.EvoEconomy;
 import fr.palmus.evoplugin.item.InventoryHelper;
-import fr.palmus.evoplugin.economy.Economy;
 import fr.palmus.evoplugin.fastboard.EvoScoreboard;
 import fr.palmus.evoplugin.listeners.*;
 import fr.palmus.evoplugin.period.PeriodCaster;
@@ -41,8 +41,6 @@ public class EvoPlugin extends JavaPlugin {
     private Formator formator;
 
     private PlayerData customPlayer;
-
-    private Economy economyModule;
 
     private PeriodCaster periodCaster;
 
@@ -104,7 +102,7 @@ public class EvoPlugin extends JavaPlugin {
         customLogger.debug(ChatColor.DARK_GREEN + "-------------------------------------------------------------------");
 
         try {
-            economyModule = new Economy(this);
+            EvoEconomy.setup();
         } catch (Exception e) {
             customLogger.debug(ChatColor.RED + "Failed Load economy module FATAL");
             getPluginLoader().disablePlugin(this);
@@ -117,7 +115,7 @@ public class EvoPlugin extends JavaPlugin {
         customLogger.debug(ChatColor.YELLOW + "Checking for connected players...");
         for (Player pl : Bukkit.getOnlinePlayers()) {
             getCustomPlayer().initPlayer(pl);
-            getEconomyModule().initPlayerEcon(pl);
+            EvoPlayer.getInstanceOf(pl).getEconomy().initPlayerEcon();
 
             FastBoard boards = new FastBoard(pl);
             EvoScoreboard.registerPlayer(pl, boards);
@@ -136,8 +134,8 @@ public class EvoPlugin extends JavaPlugin {
         saveDefaultConfig();
 
         for (Player pl : Bukkit.getOnlinePlayers()) {
-           EvoPlayer.getInstanceOf(pl).saveExp();
-            getEconomyModule().getPlayerEcon(pl).saveMoney();
+            EvoPlayer.getInstanceOf(pl).saveExp();
+            EvoPlayer.getInstanceOf(pl).getEconomy().saveMoney();
         }
 
         try {
@@ -162,7 +160,6 @@ public class EvoPlugin extends JavaPlugin {
         getCommand("exp").setExecutor(new ExpExecutor());
         getCommand("periode").setExecutor(new PeriodExecutor());
         getCommand("money").setExecutor(new EconExecutor());
-        customLogger.debug(ChatColor.GREEN + "Commands modules Enabled");
     }
 
     private void setTabCompleter() {
@@ -210,9 +207,5 @@ public class EvoPlugin extends JavaPlugin {
 
     public FileConfiguration getPeriodConfigurationFile() {
         return periodConfigurationFile;
-    }
-
-    public Economy getEconomyModule() {
-        return economyModule;
     }
 }

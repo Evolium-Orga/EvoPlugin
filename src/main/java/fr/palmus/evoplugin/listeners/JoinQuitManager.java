@@ -5,6 +5,7 @@ import fr.palmus.evoplugin.fastboard.EvoScoreboard;
 import fr.palmus.evoplugin.fastboard.FastBoard;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,13 +23,13 @@ public class JoinQuitManager implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player pl = e.getPlayer();
-        // TODO: DEBUG
-        System.out.println("[EvoPlugin] Scoreboard linked !");
+
         main.getCustomPlayer().initPlayer(pl);
         if(pl.isOp()){
-            pl.setGameMode(GameMode.CREATIVE);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> pl.setGameMode(GameMode.CREATIVE), 20);
         }
-        main.getEconomyModule().initPlayerEcon(pl);
+
+        EvoPlayer.getInstanceOf(pl).getEconomy().initPlayerEcon();
         FastBoard board = new FastBoard(pl);
 
         board.updateTitle(ChatColor.RED + "Evolium");
@@ -45,8 +46,10 @@ public class JoinQuitManager implements Listener {
         if (board != null) {
             board.delete();
         }
+
         EvoPlayer.getInstanceOf(pl).saveExp();
-        main.getEconomyModule().getPlayerEcon(pl).saveMoney();
+        EvoPlayer.getInstanceOf(pl).getEconomy().initPlayerEcon();
+
         main.getPeriodConfigurationFile().save(main.periodConfigFile);
         main.getCustomPlayer().saveData(pl, main.getDatabaseManager().getDatabase().getConnection());
     }

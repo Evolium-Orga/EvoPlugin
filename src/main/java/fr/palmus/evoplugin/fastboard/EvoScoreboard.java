@@ -37,8 +37,8 @@ public class EvoScoreboard {
             prefix = "null";
         }
         String period = main.getPeriodCaster().getPeriodToString(evoPlayer.getPlayerPeriod());
-        int money = main.getEconomyModule().getPlayerEcon(pl).getMoney();
-        int bank = main.getEconomyModule().getPlayerEcon(pl).getBank();
+        int money = EvoPlayer.getInstanceOf(pl).getEconomy().getMoney();
+        int bank = EvoPlayer.getInstanceOf(pl).getEconomy().getBank();
         board.updateTitle(ChatColor.WHITE + "§lPLAY.EVOLIUM.FR ☀");
         board.updateLines(
                 "§7",
