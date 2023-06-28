@@ -1,0 +1,47 @@
+name: EvoPlugin
+author: Palmus_
+main: fr.palmus.evoplugin.EvoPlugin
+version: 1.0
+api-version: "1.20"
+libraries:
+  - org.mariadb.jdbc:mariadb-java-client:3.0.6
+depend:
+  - LuckPerms
+  - PlaceholderAPI
+commands:
+  exp:
+    description: Intéragir avec le module d'exp
+    default: op
+    usage: /exp add|set|downgrade|upgrade|infos
+    permission: evoplugin.exp_mod
+
+  money:
+    description: Accéder au module d'economie
+    permission: evoplugin.econ_mod
+
+  period:
+    description: Accéder aux information à propos des périodes
+    aliases:
+      - info
+      - infos
+      - periodes
+      - period
+
+  bank:
+    description: Montre l'argent d'un joueur
+
+permissions:
+  evoplugin.*:
+    description: Administrator permissions.
+    children:
+      evoplugin.exp_mod: true
+      evoplugin.econ_mod: true
+
+  evoplugin.exp_mod:
+    description: Access to exp moderation commands
+    default: op
+
+  evoplugin.econ_mod:
+    description: Jog a ShipBattle evoplugin setup parancsaihoz.
+    default: op
+

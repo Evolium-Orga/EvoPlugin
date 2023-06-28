@@ -1,0 +1,7 @@
+#DEBUG MODE, will print additional information in the console
+debug: true
+
+period:
+  first-xp-milestone: 20000
+  second-xp-milestone: 30000
+  third-xp-milestone: 45000
