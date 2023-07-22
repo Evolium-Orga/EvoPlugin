@@ -11,23 +11,21 @@ import org.bukkit.entity.Player;
  */
 public class Message {
 
-    private static final EvoPlugin main = EvoPlugin.getInstance();
-
     public static final String NO_PERMISSION = StringConfig.getString("commands.no_perm");
     public static final String UNKNOWN_PLAYER = StringConfig.getString("commands.unknown_player");
 
     /**
      * The function can send a formatted message to the player based on the provided level
-     * @param pl  Represents the player to whom the message will be sent. It should be an instance of the {@link Player} class.
+     * @param player  Represents the player to whom the message will be sent. It should be an instance of the {@link Player} class.
      * @param level Specifies the level of the message. It should be an instance of the {@link PrefixLevel} enum.
      * @param msg Represents the content of the message that will be sent to the player. It should be a string value.
      */
-    public static void sendPlayerMessage(Player pl, PrefixLevel level, String msg) {
+    public static void sendPlayerMessage(Player player, PrefixLevel level, String msg) {
 
         switch (level){
-            case GOOD -> pl.sendMessage(main.getFormator().formatGood(msg, pl));
-            case NORMAL -> pl.sendMessage(main.getFormator().formatNormal(msg, pl));
-            case ERROR -> pl.sendMessage(main.getFormator().formatError(msg, pl));
+            case GOOD -> player.sendMessage(Formator.formatGood(msg, player));
+            case NORMAL -> player.sendMessage(Formator.formatNormal(msg, player));
+            case ERROR -> player.sendMessage(Formator.formatError(msg, player));
         }
     }
 }

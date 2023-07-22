@@ -17,7 +17,7 @@ public class Logger {
     // Log a formatted message to the console
     public void log(String msg) {
         // Format the message with evoplugin name and color codes
-        msg = ChatColor.translateAlternateColorCodes('&', Prefix.getPrefix(PrefixLevel.NORMAL) + msg);
+        msg = "§2[EvoPlugin] " + ChatColor.translateAlternateColorCodes('&', msg);
         // Send the formatted message to the console
         Bukkit.getConsoleSender().sendMessage(msg);
     }

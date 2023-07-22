@@ -2,13 +2,12 @@ package fr.palmus.evoplugin.economy;
 
 import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.listeners.custom.PlayerMoneyChangeEvent;
+import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.io.IOException;
 
 
@@ -24,38 +23,22 @@ public class EvoEconomy {
 
     int bank;
 
-    private final EvoPlugin main = EvoPlugin.getInstance();
+    FileConfiguration economyConfig;
 
-    private static File file;
-    private static FileConfiguration cfg;
+    private final EvoPlugin main = EvoPlugin.getInstance();
 
     /**
      * Constructor for the EvoEconomy class.
      * Initializes the player's economy data by loading it from the configuration file.
+     *
      * @param pl The player associated with this economy instance.
      */
     public EvoEconomy(Player pl) {
         this.player = pl;
+        economyConfig = EvoConfig.getEconomyConfiguration();
 
-        this.bank = main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".bank");
-        this.money = main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".money");
-    }
-
-    /**
-     * Sets up the economy module by loading the configuration file and initializing the necessary resources.
-     */
-    public static void setup(){
-        EvoPlugin.getInstance().getCustomLogger().debug(ChatColor.GOLD + "Starting Economy module...");
-        if (file == null) {
-            file = new File("plugins/EvoPlugin", "economy.yml");
-        }
-        if (!file.exists()) {
-            EvoPlugin.getInstance().saveResource("economy.yml", false);
-        }
-        cfg = YamlConfiguration.loadConfiguration(file);
-        EvoPlugin.getInstance().getCustomLogger().debug(ChatColor.GOLD + "Economy config files loaded");
-
-        EvoPlugin.getInstance().getCustomLogger().debug(ChatColor.GREEN + "Economy module successfully loaded !");
+        this.bank = economyConfig.getInt(player.getUniqueId() + ".bank");
+        this.money = economyConfig.getInt(player.getUniqueId() + ".money");
     }
 
     /**
@@ -65,12 +48,12 @@ public class EvoEconomy {
      */
     public void initPlayerEcon() {
 
-        if(!cfg.contains(player.getDisplayName())){
-            cfg.set(player.getUniqueId() + ".money", 0);
-            cfg.set(player.getUniqueId() + ".bank", 0);
+        if (!economyConfig.contains(player.getDisplayName())) {
+            economyConfig.set(player.getUniqueId() + ".money", 0);
+            economyConfig.set(player.getUniqueId() + ".bank", 0);
 
             try {
-                cfg.save(file);
+                economyConfig.save(EvoConfig.getEconomyFile());
             } catch (IOException e) {
                 e.printStackTrace();
                 main.getCustomLogger().log(ChatColor.RED + "Failed to save money of player '" + player.getDisplayName() + "' shutting down the server");
@@ -82,9 +65,10 @@ public class EvoEconomy {
     /**
      * Adds money to the player's balance.
      * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
      * @param money The amount of money to add.
      */
-    public void addMoney(int money){
+    public void addMoney(int money) {
         this.money += money;
         PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, bank, TransferType.MONEY, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -93,9 +77,10 @@ public class EvoEconomy {
     /**
      * Subtracts money from the player's balance.
      * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
      * @param money The amount of money to subtract.
      */
-    public void subtractMoney(int money){
+    public void subtractMoney(int money) {
         this.money -= money;
         PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, bank, TransferType.MONEY, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -104,9 +89,10 @@ public class EvoEconomy {
     /**
      * Sets the player's money to a specific amount.
      * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
      * @param money The new money amount.
      */
-    public void setMoney(int money){
+    public void setMoney(int money) {
         this.money = money;
         PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, bank, TransferType.MONEY, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -115,9 +101,10 @@ public class EvoEconomy {
     /**
      * Adds money to the player's bank balance.
      * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
      * @param money The amount of money to add to the bank balance.
      */
-    public void addBank(int money){
+    public void addBank(int money) {
         this.money += money;
         PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, bank, TransferType.BANK, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -126,9 +113,10 @@ public class EvoEconomy {
     /**
      * Subtracts money from the player's bank balance.
      * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
      * @param money The amount of money to subtract from the bank balance.
      */
-    public void subtractBank(int money){
+    public void subtractBank(int money) {
         this.money -= money;
         PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, bank, TransferType.BANK, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -137,6 +125,7 @@ public class EvoEconomy {
     /**
      * Sets the player's bank balance to a specific amount.
      * Triggers a PlayerMoneyChangeEvent with the updated bank balance and transfer type.
+     *
      * @param bank The new bank balance amount.
      */
     public void setBank(int bank) {
@@ -148,12 +137,13 @@ public class EvoEconomy {
     /**
      * Saves the player's money to the configuration file.
      */
-    public void saveMoney(){
-        main.getPeriodConfigurationFile().set(player.getDisplayName() + ".money", money);
+    public void saveMoney() {
+        economyConfig.set(player.getDisplayName() + ".money", money);
     }
 
     /**
      * Returns the player associated with this economy instance.
+     *
      * @return The player object.
      */
     public Player getPlayer() {
@@ -162,6 +152,7 @@ public class EvoEconomy {
 
     /**
      * Returns the amount of money the player has.
+     *
      * @return The money amount.
      */
     public int getMoney() {
@@ -170,6 +161,7 @@ public class EvoEconomy {
 
     /**
      * Returns the amount of money in the player's bank.
+     *
      * @return The bank balance amount.
      */
     public int getBank() {
@@ -180,7 +172,7 @@ public class EvoEconomy {
      * Enumeration representing the transfer type for the PlayerMoneyChangeEvent.
      * It can be either BANK or MONEY.
      */
-    public enum TransferType{
+    public enum TransferType {
         BANK, MONEY
     }
 }

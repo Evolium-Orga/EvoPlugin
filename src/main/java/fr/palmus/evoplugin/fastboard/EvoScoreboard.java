@@ -1,6 +1,7 @@
 package fr.palmus.evoplugin.fastboard;
 
 import fr.palmus.evoplugin.EvoPlugin;
+import fr.palmus.evoplugin.api.messages.Formator;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
 import net.luckperms.api.model.user.User;
 import org.bukkit.ChatColor;
@@ -31,30 +32,36 @@ public class EvoScoreboard {
         int rank = evoPlayer.getRank();
         User user = EvoPlugin.getInstance().LPapi.getPlayerAdapter(Player.class).getUser(pl);
         String prefix;
+
         try {
             prefix = user.getCachedData().getMetaData().getPrefix().replace("&", "§").replace('"', ' ');
         } catch (NullPointerException e) {
             prefix = "null";
         }
-        String period = main.getPeriodCaster().getPeriodToString(evoPlayer.getPlayerPeriod());
+
+        String period = evoPlayer.getEntirePeriodStyle();
+
         int money = EvoPlayer.getInstanceOf(pl).getEconomy().getMoney();
         int bank = EvoPlayer.getInstanceOf(pl).getEconomy().getBank();
-        board.updateTitle(ChatColor.WHITE + "§lPLAY.EVOLIUM.FR ☀");
-        board.updateLines(
-                "§7",
-                "§7| §r§lMa Période",
-                "  §7Période actuelle: §2" + period + " " + main.getPeriodCaster().getRankToString(rank),
-                "  §7Points d'Expérience: §2" + main.getPeriodCaster().formatIntegerToReadableString(evoPlayer.getExp()) + "/" + main.getPeriodCaster().getFormattedPeriodExpLimit(rank),
-                "  §7Objectifs: §2",
-                " §6",
-                "§7| §r§lMon Profil",
-                "  §7Pseudo: §6" + pl.getDisplayName(),
-                "  §7Grade: §6" + prefix,
-                "  §7Argent: §6" + money + "§6 ⛀",
-                "  §7Banque: §6" + bank + "§6 ⛃",
-                " ",
-                "§aVoter Pour le serveur = soutiens"
-        );
+
+        board.updateTitle(Formator.hex("#e3f2c1PLAY.EVOLIUM.FR ☀"));
+        board.updateLines(Formator.hex(
+                "",
+                "",
+                "§7| §r#c9dbb2Mon Profil",
+                "  §7Pseudo: #E5F9DB" + pl.getDisplayName(),
+                "  §7Grade: #E5F9DB" + prefix,
+                "",
+                "§7| §r#c4d7b2Ma Période",
+                "  §7Période actuelle: #E5F9DB" + period,
+                "  §7Points d'Expérience: #E5F9DB" + main.getPeriodCaster().formatIntegerToReadableString(evoPlayer.getExp()) + "/" + main.getPeriodCaster().getFormattedPeriodExpLimit(rank),
+                "",
+                "§7| §r#c9dbb2Mon Argent",
+                "  §7Argent: #E5F9DB" + money + "§6 ⛀",
+                "  §7Banque: #E5F9DB" + bank + "§6 ⛃",
+                "",
+                ""
+        ));
     }
 
     /**

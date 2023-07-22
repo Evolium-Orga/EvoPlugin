@@ -1,7 +1,6 @@
 #DEBUG MODE, will print additional information in the console
 debug: true
 
-period:
-  first-xp-milestone: 20000
-  second-xp-milestone: 30000
-  third-xp-milestone: 45000
+first_xp_milestone: "20000"
+second_xp_milestone: "30000"
+third_xp_milestone: "45000"

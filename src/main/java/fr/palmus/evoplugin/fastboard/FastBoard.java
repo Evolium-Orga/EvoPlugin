@@ -25,6 +25,7 @@ package fr.palmus.evoplugin.fastboard;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -313,19 +314,7 @@ public class FastBoard {
      * @throws IllegalArgumentException if one line is longer than 30 chars on 1.12 or lower
      * @throws IllegalStateException    if {@link #delete()} was call before
      */
-    public synchronized void updateLines(Collection<String> lines) {
-        Objects.requireNonNull(lines, "lines");
-        checkLineNumber(lines.size(), false, true);
-
-        if (!VersionType.V1_13.isHigherOrEqual()) {
-            int lineCount = 0;
-            for (String s : lines) {
-                if (s != null && s.length() > 30) {
-                    throw new IllegalArgumentException("Line " + lineCount + " is longer than 30 chars");
-                }
-                lineCount++;
-            }
-        }
+    public synchronized void updateLines(@NotNull Collection<String> lines) {
 
         List<String> oldLines = new ArrayList<>(this.lines);
         this.lines.clear();

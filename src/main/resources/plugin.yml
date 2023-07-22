@@ -3,6 +3,8 @@ author: Palmus_
 main: fr.palmus.evoplugin.EvoPlugin
 version: 1.0
 api-version: "1.20"
+loadbefore:
+  - EvoDiscord
 libraries:
   - org.mariadb.jdbc:mariadb-java-client:3.0.6
 depend:
@@ -10,22 +12,22 @@ depend:
   - PlaceholderAPI
 commands:
   exp:
-    description: Intéragir avec le module d'exp
+    description: Interact with the exp moderation commands
     default: op
     usage: /exp add|set|downgrade|upgrade|infos
     permission: evoplugin.exp_mod
 
   money:
-    description: Accéder au module d'economie
+    description:  Access the economy module
     permission: evoplugin.econ_mod
 
   period:
-    description: Accéder aux information à propos des périodes
+    description: Access information about periods
     aliases:
-      - info
-      - infos
       - periodes
-      - period
+      - periode
+      - era
+      - eras
 
   bank:
     description: Montre l'argent d'un joueur
@@ -42,6 +44,6 @@ permissions:
     default: op
 
   evoplugin.econ_mod:
-    description: Jog a ShipBattle evoplugin setup parancsaihoz.
+    description: Access to economy moderation commands
     default: op
 

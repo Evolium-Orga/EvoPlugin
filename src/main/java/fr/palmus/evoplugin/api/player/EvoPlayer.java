@@ -7,12 +7,14 @@ import fr.palmus.evoplugin.economy.EvoEconomy;
 import fr.palmus.evoplugin.enumeration.Period;
 import fr.palmus.evoplugin.listeners.custom.PlayerExpChangeEvent;
 import fr.palmus.evoplugin.listeners.custom.PlayerPeriodChangeEvent;
+import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,8 +22,8 @@ import java.util.logging.Level;
 
 /**
  * Represents a player in the EvoPlugin system.
- * A rank refer to the section of the period the player's in for example:
- * If a player's period is Antic 3 the rank is 3 and the period Antic
+ * A rank refers to the section of the period the player's in, for example,
+ * If a player's period is Antic 3 the rank is 3, and the period Antic
  */
 public class EvoPlayer {
 
@@ -36,37 +38,58 @@ public class EvoPlayer {
     private Period playerPeriod;
 
     private final EvoEconomy playerEconomy;
+    private final PlayerData playerDatabaseConn;
 
     /**
      * Constructor for the EvoPlayer class.
-     * @param pl The player associated with this EvoPlayer.
+     *
+     * @param player The player associated with this EvoPlayer.
      */
-    private EvoPlayer(Player pl) {
-        this.player = pl;
-        this.experience = main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".exp");
+    private EvoPlayer(Player player) {
+        this.player = player;
+        this.experience = EvoConfig.getPeriodConfiguration().getInt(this.player.getUniqueId() + ".exp");
 
-        playerEconomy = new EvoEconomy(pl);
-        playerPeriod = main.getPeriodCaster().getEnumPeriodFromInt(main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".period"));
+        this.playerEconomy = new EvoEconomy(player);
+        this.playerDatabaseConn = new PlayerData(player);
+        this.playerPeriod = main.getPeriodCaster().getEnumPeriodFromInt(EvoConfig.getPeriodConfiguration().getInt(this.player.getUniqueId() + ".period"));
 
-        playerToEvoplayerHashmap.put(pl, this);
+        playerToEvoplayerHashmap.put(player, this);
     }
 
     /**
      * Retrieves the instance of EvoPlayer associated with the specified player.
      * If the instance does not exist, it creates a new one.
-     * @param pl The player to get the EvoPlayer instance for.
+     *
+     * @param player The player to get the EvoPlayer instance for.
      * @return The EvoPlayer instance associated with the player.
      */
-    public static EvoPlayer getInstanceOf(Player pl) {
-        if(playerToEvoplayerHashmap.containsKey(pl)){
-            return playerToEvoplayerHashmap.get(pl);
-        }else {
-            return new EvoPlayer(pl);
+    public static EvoPlayer getInstanceOf(Player player) {
+        if (playerToEvoplayerHashmap.containsKey(player)) {
+            return playerToEvoplayerHashmap.get(player);
+        } else {
+            return new EvoPlayer(player);
         }
     }
 
     /**
+     * Recreate the instance of an EvoPlayer associated with the specified player.
+     * If the instance does not exist, it creates a new one.
+     * This function is used to update player data after a database registration
+     *
+     * @param player The player to get the EvoPlayer instance for.
+     * @return The EvoPlayer instance associated with the player.
+     */
+    public static EvoPlayer recreateInstanceOf(Player player) {
+        if (playerToEvoplayerHashmap.containsKey(player)) {
+            playerToEvoplayerHashmap.remove(player);
+            return new EvoPlayer(player);
+        }
+        return getInstanceOf(player);
+    }
+
+    /**
      * Retrieves the Bukkit Player object associated with this EvoPlayer.
+     *
      * @return The Bukkit Player object.
      */
     public Player getPlayer() {
@@ -75,33 +98,47 @@ public class EvoPlayer {
 
     /**
      * Retrieves the rank value of the player.
+     *
      * @return The rank value.
      */
     public int getRank() {
-        if (EvoPlugin.getInstance().getPeriodConfigurationFile().get(player.getUniqueId() + ".rank") == null) {
+        if (EvoConfig.getPeriodConfiguration().get(player.getUniqueId() + ".rank") == null) {
             return 0;
         }
 
-        return EvoPlugin.getInstance().getPeriodConfigurationFile().getInt(player.getUniqueId() + ".rank");
+        return EvoConfig.getPeriodConfiguration().getInt(player.getUniqueId() + ".rank");
     }
 
     /**
      * Adds experience points to the player.
-     * @param exp The amount of experience points to add.
+     *
+     * @param exp The number of experience points to add.
      */
     public void addExp(int exp) {
         experience = experience + exp;
 
         PlayerExpChangeEvent event;
 
-        if(exp > 0) {
-            event = new PlayerExpChangeEvent(player, experience, ExpAction.ADD, main);
+        if (exp > 0) {
+            if (main.getPeriodCaster().getPeriodExpLimit(getRank()) <= experience) {
+                periodUpgrade();
+                int oldExp = experience;
+                experience = 0;
+                addExp(oldExp - main.getPeriodCaster().getPeriodExpLimit(getRank() - 1));
+            }
         }
 
-        if(exp < 0) {
-            event = new PlayerExpChangeEvent(player, experience, ExpAction.SUBTRACT, main);;
-        }else{
-            return;
+        if (exp < 0) {
+            event = new PlayerExpChangeEvent(player, experience, ExpAction.SUBTRACT, main);
+
+            if (0 >= experience) {
+                periodDowngrade();
+                int oldExp = experience;
+                experience = main.getPeriodCaster().getPeriodExpLimit(getRank() - 1);
+                addExp(oldExp);
+            }
+        }else {
+            event = new PlayerExpChangeEvent(player, experience, ExpAction.ADD, main);
         }
 
         Bukkit.getServer().getPluginManager().callEvent(event);
@@ -110,6 +147,7 @@ public class EvoPlayer {
 
     /**
      * Sets the experience points for the player.
+     *
      * @param exp The new value for the experience points.
      */
     public void setExp(int exp) {
@@ -124,7 +162,6 @@ public class EvoPlayer {
             PlayerExpChangeEvent event = new PlayerExpChangeEvent(player, experience, ExpAction.SUBTRACT, main);
             Bukkit.getServer().getPluginManager().callEvent(event);
         }
-        saveExp();
     }
 
     /**
@@ -132,7 +169,7 @@ public class EvoPlayer {
      */
     public void resetExp() {
         experience = 0;
-        saveExp();
+
         PlayerExpChangeEvent event = new PlayerExpChangeEvent(player, experience, ExpAction.RESET, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
@@ -142,14 +179,21 @@ public class EvoPlayer {
      * Otherwise, triggers a period upgrade event.
      */
     public void periodUpgrade() {
+        EvoConfig.savePeriodConfig();
+
         if (getRank() == 3) {
-            main.getPeriodConfigurationFile().set(player.getUniqueId() + ".period", main.getPeriodCaster().getIntPeriodFromEnum(playerPeriod) + 1);
-            main.getPeriodConfigurationFile().set(player.getUniqueId() + ".rank", 1);
-            return;
+            playerPeriod = Period.getNextPeriod(playerPeriod);
+
+            EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", main.getPeriodCaster().getPeriodIntFromEnum(playerPeriod));
+            EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".rank", 1);
+        } else {
+            EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".rank", getRank() + 1);
         }
 
+        EvoConfig.savePeriodConfig();
+
         playPlayerUpgradeAnimation();
-        PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.UPGRADE, main);
+        PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), EvoConfig.getPeriodConfiguration().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.UPGRADE, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
@@ -159,20 +203,23 @@ public class EvoPlayer {
     public void resetPeriod() {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§cRESET §2: §a" + getEntirePeriodStyle() + "§2 >> §a" + main.getPeriodCaster().getPeriodToString(Period.PREHISTOIRE) + " I"));
 
-        main.getPeriodConfigurationFile().set(player.getUniqueId() + ".rank", 1);
-        main.getPeriodConfigurationFile().set(player.getUniqueId() + ".period", 0);
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".rank", 1);
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", 0);
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".multiplier", 0);
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".exp", 0);
+
+        experience = 0;
+        playerPeriod = Period.PREHISTOIRE;
 
         try {
-            main.getPeriodConfigurationFile().save(main.periodConfigFile);
+            EvoConfig.getPeriodConfiguration().save(EvoConfig.getPeriodFile());
         } catch (IOException e) {
             e.printStackTrace();
             main.getLogger().log(Level.SEVERE, ChatColor.RED + "Failed to save period of player '" + player.getDisplayName() + "' shutting down the server");
             Bukkit.shutdown();
         }
 
-        experience = 0;
-        playerPeriod = Period.PREHISTOIRE;
-        PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.RESET, main);
+        PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), EvoConfig.getPeriodConfiguration().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.RESET, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
@@ -181,36 +228,37 @@ public class EvoPlayer {
      */
     public void periodDowngrade() {
         if (getRank() == 1) {
-            main.getPeriodConfigurationFile().set(player.getUniqueId() + ".period", main.getPeriodCaster().getIntPeriodFromEnum(Period.getBelowPeriod(playerPeriod)));
-            main.getPeriodConfigurationFile().set(player.getUniqueId() + ".rank", 3);
+            playerPeriod = Period.getBelowPeriod(playerPeriod);
+            EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", main.getPeriodCaster().getPeriodIntFromEnum(playerPeriod));
+            EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".rank", 3);
         } else {
-            main.getPeriodConfigurationFile().set(player.getUniqueId() + ".rank", getRank() - 1);
+            EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".rank", getRank() - 1);
         }
 
-        try {
-            main.getPeriodConfigurationFile().save(main.periodConfigFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            main.getLogger().log(Level.SEVERE, ChatColor.RED + "Failed to save period of player '" + player.getDisplayName() + "' shutting down the server");
-            Bukkit.shutdown();
-        }
+        EvoConfig.savePeriodConfig();
 
-        PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), main.getPeriodConfigurationFile().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.DOWNGRADE, main);
+        PlayerPeriodChangeEvent event = new PlayerPeriodChangeEvent(getPlayer(), EvoConfig.getPeriodConfiguration().getInt(player.getUniqueId() + ".period"), getRank(), PeriodAction.DOWNGRADE, main);
         Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
     /**
      * Saves the player's experience points to the configuration file.
      */
-    public void saveExp() {
-        main.getPeriodConfigurationFile().set(player.getUniqueId() + ".exp", getExp());
+    public void saveCache() {
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".exp", getExp());
 
         try {
-            main.getPeriodConfigurationFile().save(main.periodConfigFile);
+            EvoConfig.getPeriodConfiguration().save(EvoConfig.getPeriodFile());
         } catch (IOException e) {
             e.printStackTrace();
-            main.getLogger().log(Level.SEVERE, ChatColor.RED + "Failed to save exp of player '" + player.getDisplayName() + "' shutting down the server");
+            main.getCustomLogger().log(ChatColor.RED + "Failed to save exp of player '" + player.getDisplayName() + "' shutting down the server");
             Bukkit.shutdown();
+        }
+
+        try {
+            EvoConfig.getPeriodConfiguration().save(EvoConfig.getPeriodFile());
+        } catch (IOException | NullPointerException e) {
+            main.getCustomLogger().log(ChatColor.RED + "FAILED TO SAVE CACHE FILE ON DATABASE, EVERY DATA EARN DURING THIS SESSION IS LOST");
         }
     }
 
@@ -261,39 +309,24 @@ public class EvoPlayer {
      * @deprecated This method contains a lot of redundant code and needs to be refactored.
      */
     @Deprecated
-    public void playPlayerUpgradeAnimation() {
-        String stringedPeriod;
-
-        if (getRank() == 3) {
-            stringedPeriod = main.getPeriodCaster().getPeriodToString(Period.getNextPeriod(playerPeriod)) + " I";
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§2UPGRADE §2: §a" + getEntirePeriodStyle() + "§2 >> §a" + main.getPeriodCaster().getPeriodToString(Period.getNextPeriod(playerPeriod)) + "I"));
+    private void playPlayerUpgradeAnimation() {
+        if (getRank() == 1) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§2UPGRADE §2: §a" + main.getPeriodCaster().getPeriodToString(Period.getBelowPeriod(playerPeriod)) + " III§2 >> §a" + getEntirePeriodStyle()));
             getEconomy().addMoney(10000);
         } else {
-            stringedPeriod = getEntirePeriodStyle() + "I";
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§2UPGRADE §2: §a" + getEntirePeriodStyle() + "§2 >> §a" + getEntirePeriodStyle() + "I"));
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§2UPGRADE §2: §a" + getEntirePeriodStyle().substring(0, getEntirePeriodStyle().length() - 1) + "§2 >> §a" + getEntirePeriodStyle()));
             getEconomy().addMoney(5000);
         }
 
-        player.sendTitle("§a" + stringedPeriod, "§2---------------", 20, 60, 20);
+        player.sendTitle("§a" + getEntirePeriodStyle(), "§2---------------", 20, 60, 20);
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1, 1);
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1, 1);
 
         //TODO: add the given amount of money in the message
-        Message.sendPlayerMessage(player, PrefixLevel.GOOD, "Vous venez de passer en " + stringedPeriod + " !");
-        main.getPeriodConfigurationFile().set(player.getUniqueId() + ".rank", getRank() + 1);
-
-        try {
-            main.getPeriodConfigurationFile().save(main.periodConfigFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-            main.getLogger().log(Level.SEVERE, ChatColor.RED + "Failed to save period of player '" + player.getDisplayName() + "' shutting down the server");
-            Bukkit.shutdown();
-        }
-
-        playerPeriod = Period.getBelowPeriod(playerPeriod);
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§6LIMITEUR §2: §a" + main.getPeriodCaster().getRankToString(getRank())));
+        Message.sendPlayerMessage(player, PrefixLevel.GOOD, "Vous venez de passer en " + getEntirePeriodStyle() + " !");
     }
 
+    @Deprecated
     public String getProgressBar() {
         int placement = this.getExp() * 20 / main.getPeriodCaster().getPeriodExpLimit(this.getRank());
         StringBuilder str = new StringBuilder("||||||||||||||||||||");
@@ -302,6 +335,7 @@ public class EvoPlayer {
         return str.toString();
     }
 
+    @Deprecated
     public int getProgressPercent() {
         return this.getExp() * 100 / main.getPeriodCaster().getPeriodExpLimit(this.getRank());
     }
@@ -313,5 +347,9 @@ public class EvoPlayer {
      */
     public EvoEconomy getEconomy() {
         return playerEconomy;
+    }
+
+    public PlayerData getDatabaseConnection() {
+        return playerDatabaseConn;
     }
 }

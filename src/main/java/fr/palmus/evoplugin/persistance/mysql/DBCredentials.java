@@ -27,7 +27,7 @@ public class DBCredentials {
     EvoPlugin main = EvoPlugin.getInstance();
 
     public DBCredentials() {
-        main.getCustomLogger().debug(ChatColor.GOLD + "Starting MYSQL module...");
+        main.getCustomLogger().debug(ChatColor.GREEN + "Starting MYSQL module...");
         if (file == null) {
             file = new File("plugins/EvoPlugin", "mysql.yml");
         }
@@ -35,7 +35,7 @@ public class DBCredentials {
             main.saveResource("mysql.yml", false);
         }
         cfg = YamlConfiguration.loadConfiguration(file);
-        main.getCustomLogger().debug(ChatColor.GOLD + "MYSQL config files generated");
+        main.getCustomLogger().debug(ChatColor.GREEN + "MYSQL config files generated");
 
         host = cfg.getString("host");
         user = cfg.getString("user");

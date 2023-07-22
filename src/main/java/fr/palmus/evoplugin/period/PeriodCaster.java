@@ -2,16 +2,27 @@ package fr.palmus.evoplugin.period;
 
 import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.enumeration.Period;
+import org.bukkit.ChatColor;
 
 import java.util.Arrays;
 
 public class PeriodCaster {
 
-    private final EvoPlugin main = EvoPlugin.getInstance();
+    private int FIRST_EXP_MILESTONE;
+    private int SECOND_EXP_MILESTONE;
+    private int THIRD_EXP_MILESTONE;
 
-    private final int FIRST_EXP_MILESTONE = main.getConfig().getInt("period.first-exp-milestone");
-    private final int SECOND_EXP_MILESTONE = main.getConfig().getInt("period.second-exp-milestone");
-    private final int THIRD_EXP_MILESTONE = main.getConfig().getInt("period.third-exp-milestone");
+    public PeriodCaster() {
+        EvoPlugin main = EvoPlugin.getInstance();
+        try {
+            FIRST_EXP_MILESTONE = Integer.parseInt(main.getConfig().getString("first_exp_milestone"));
+            SECOND_EXP_MILESTONE = Integer.parseInt(main.getConfig().getString("second_exp_milestone"));
+            THIRD_EXP_MILESTONE = Integer.parseInt(main.getConfig().getString("third_exp_milestone"));
+        }catch (NumberFormatException e) {
+            main.getCustomLogger().log(ChatColor.RED + "Failed to load data from config files. FATAL");
+            main.safeInitialized = false;
+        }
+    }
 
     public String getRankToString(int i) {
 
@@ -60,7 +71,7 @@ public class PeriodCaster {
         return Arrays.stream(Period.values()).toList().get(i);
     }
 
-    public Integer getIntPeriodFromEnum(Period desiredPeriod) {
+    public Integer getPeriodIntFromEnum(Period desiredPeriod) {
 
         int i = 0;
 

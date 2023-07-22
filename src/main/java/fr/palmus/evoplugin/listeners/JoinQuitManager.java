@@ -4,7 +4,7 @@ import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.fastboard.EvoScoreboard;
 import fr.palmus.evoplugin.fastboard.FastBoard;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
-import net.md_5.bungee.api.ChatColor;
+import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -14,7 +14,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class JoinQuitManager implements Listener {
 
@@ -23,34 +22,37 @@ public class JoinQuitManager implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player pl = e.getPlayer();
+        EvoPlayer evoPlayer = EvoPlayer.getInstanceOf(pl);
 
-        main.getCustomPlayer().initPlayer(pl);
-        if(pl.isOp()){
+        evoPlayer.getDatabaseConnection().registerPlayerOnDatabase();
+        evoPlayer = EvoPlayer.recreateInstanceOf(pl);
+
+        if(pl.hasPermission("minecraft.command.gamemode")){
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> pl.setGameMode(GameMode.CREATIVE), 20);
         }
 
-        EvoPlayer.getInstanceOf(pl).getEconomy().initPlayerEcon();
+        evoPlayer.getEconomy().initPlayerEcon();
         FastBoard board = new FastBoard(pl);
-
-        board.updateTitle(ChatColor.RED + "Evolium");
 
         EvoScoreboard.getPlayerToScoreboardHashmap().put(pl.getUniqueId(), board);
         EvoScoreboard.updateScoreboard(pl);
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e) throws IOException, SQLException {
+    public void onQuit(PlayerQuitEvent e) throws IOException {
         Player pl = e.getPlayer();
+        EvoPlayer evoPlayer = EvoPlayer.getInstanceOf(pl);
+
         FastBoard board = EvoScoreboard.getPlayerToScoreboardHashmap().remove(e.getPlayer().getUniqueId());
 
         if (board != null) {
             board.delete();
         }
 
-        EvoPlayer.getInstanceOf(pl).saveExp();
-        EvoPlayer.getInstanceOf(pl).getEconomy().initPlayerEcon();
+        evoPlayer.saveCache();
+        evoPlayer.getEconomy().initPlayerEcon();
 
-        main.getPeriodConfigurationFile().save(main.periodConfigFile);
-        main.getCustomPlayer().saveData(pl, main.getDatabaseManager().getDatabase().getConnection());
+        EvoConfig.getPeriodConfiguration().save(EvoConfig.getPeriodFile());
+        evoPlayer.getDatabaseConnection().saveData();
     }
 }

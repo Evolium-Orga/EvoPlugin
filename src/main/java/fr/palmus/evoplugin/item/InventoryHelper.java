@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class InventoryHelper {
 
     @Deprecated
-    public void setDefaultMaterial(Inventory inv, ItemStack defaultItem) {
+    public static void setDefaultMaterial(Inventory inv, ItemStack defaultItem) {
 
         for (int i = 0; i < inv.getSize(); i++) {
             if (inv.getItem(i) == null) inv.setItem(i, defaultItem);
@@ -27,7 +27,7 @@ public class InventoryHelper {
     }
 
     @Deprecated
-    public ItemStack getHead(Player player) {
+    public static ItemStack getHead(Player player) {
         boolean isNewVersion = Arrays.stream(Material.values()).map(Material::name).toList().contains("PLAYER_HEAD");
         Material type = Material.matchMaterial(isNewVersion ? "PLAYER_HEAD" : "SKULL_ITEM");
         ItemStack item = new ItemStack(type, 1);
@@ -46,7 +46,7 @@ public class InventoryHelper {
     }
 
     @Deprecated
-    public void initInfoInventory(Inventory inv, Player pl) {
+    public static void initInfoInventory(Inventory inv, Player pl) {
 
         setDefaultMaterial(inv, new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).toItemStack());
 

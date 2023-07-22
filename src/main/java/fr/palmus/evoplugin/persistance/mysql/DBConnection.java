@@ -33,21 +33,28 @@ public class DBConnection {
         } catch (SQLException | ClassNotFoundException e) {
             connected = false;
             main.getCustomLogger().debug(ChatColor.RED + "Failed to bind to mysql database (" + this.dbCredentials.toURI() + "), maybe the credentials are incorrect. FATAL");
-            e.printStackTrace();
-            main.getPluginLoader().disablePlugin(main);
+            main.safeInitialized = false;
         }
     }
 
-    public void close() throws SQLException {
-        if (!this.connection.isClosed()) {
-            this.connection.close();
-        }
-    }
-
-    public Connection getConnection() throws SQLException {
-        if (this.connection != null) {
+    public void close() {
+        try {
             if (!this.connection.isClosed()) {
-                return this.connection;
+                this.connection.close();
+            }
+        } catch (SQLException | NullPointerException e) {
+            main.getCustomLogger().debug(ChatColor.RED + "Failed to close connection of the mysql database (" + this.dbCredentials.toURI() + "), the initialization of the plugin has probably failed. FATAL");
+        }
+    }
+
+    public Connection getRawConnection() {
+        if (this.connection != null) {
+            try {
+                if (!this.connection.isClosed()) {
+                    return this.connection;
+                }
+            } catch (SQLException e) {
+                main.getCustomLogger().log(ChatColor.RED + "Failed to bind to access mysql database (" + this.dbCredentials.toURI() + ").");
             }
         }
         connect();

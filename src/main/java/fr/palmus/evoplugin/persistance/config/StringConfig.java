@@ -30,8 +30,8 @@ public class StringConfig {
         }
 
         // Load the configuration file and default properties
-        StringConfig.config.load(new InputStreamReader(new FileInputStream(StringConfig.propertiesFile), StandardCharsets.UTF_8));
-        StringConfig.defaults.load(new InputStreamReader(main.getResource("strings.properties"), StandardCharsets.UTF_8));
+        StringConfig.config.load(new InputStreamReader(new FileInputStream(StringConfig.propertiesFile)));
+        StringConfig.defaults.load(new InputStreamReader(main.getResource("strings.properties")));
     }
 
     // Get a string value from the configuration based on the provided key
