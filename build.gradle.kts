@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "fr.palmus.evoplugin"
-version = "1.0"
+version = "1.1"
 
 val RepoUsername = providers.gradleProperty("repsyUsername")
 val RepoPassword = providers.gradleProperty("repsyPassword")
