@@ -1,28 +1,27 @@
 package fr.palmus.evoplugin;
 
-import fr.palmus.evoplugin.commands.*;
+import fr.palmus.evoplugin.api.Logger;
+import fr.palmus.evoplugin.api.player.EvoPlayer;
+import fr.palmus.evoplugin.commands.EconExecutor;
+import fr.palmus.evoplugin.commands.ExpExecutor;
+import fr.palmus.evoplugin.commands.PeriodExecutor;
 import fr.palmus.evoplugin.commands.completer.ExpCompleter;
 import fr.palmus.evoplugin.commands.completer.PeriodCompleter;
 import fr.palmus.evoplugin.fastboard.EvoScoreboard;
+import fr.palmus.evoplugin.fastboard.FastBoard;
 import fr.palmus.evoplugin.listeners.*;
 import fr.palmus.evoplugin.period.PeriodCaster;
-import fr.palmus.evoplugin.api.messages.Formator;
 import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import fr.palmus.evoplugin.persistance.config.StringConfig;
 import fr.palmus.evoplugin.persistance.mysql.EvoDatabase;
-import fr.palmus.evoplugin.api.player.EvoPlayer;
-import fr.palmus.evoplugin.api.Logger;
-import fr.palmus.evoplugin.fastboard.FastBoard;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 
@@ -38,7 +37,7 @@ public class EvoPlugin extends JavaPlugin {
 
     private PeriodCaster periodCaster;
 
-    RegisteredServiceProvider<LuckPerms> provider;
+    private RegisteredServiceProvider<LuckPerms> provider;
     public LuckPerms LPapi;
 
     @Override
@@ -103,14 +102,16 @@ public class EvoPlugin extends JavaPlugin {
             customLogger.debug(ChatColor.GREEN + "Found " + pl.getDisplayName() + ", linking done");
         }
 
-        if(EvoScoreboard.getPlayerToScoreboardHashmap().size() == 0) {
+        if (EvoScoreboard.getPlayerToScoreboardHashmap().size() == 0) {
             customLogger.debug(ChatColor.GREEN + "No player was found, linking session done");
         }
 
         customLogger.debug(ChatColor.DARK_GREEN + "-------------------------------------------------------------------");
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> checkSafeInitialization(), 40);
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this, this::checkSafeInitialization, 40);
     }
+
     @Override
     public void onDisable() {
         saveDefaultConfig();
@@ -168,7 +169,7 @@ public class EvoPlugin extends JavaPlugin {
     }
 
     public PeriodCaster getPeriodCaster() {
-        if(periodCaster == null) {
+        if (periodCaster == null) {
             periodCaster = new PeriodCaster();
         }
         return periodCaster;
@@ -179,7 +180,7 @@ public class EvoPlugin extends JavaPlugin {
     }
 
     public void checkSafeInitialization() {
-        if(!safeInitialized) {
+        if (!safeInitialized) {
             customLogger.log(ChatColor.RED + "Failed to load Evolium, see above this messaage for error report !");
             getPluginLoader().disablePlugin(this);
             return;

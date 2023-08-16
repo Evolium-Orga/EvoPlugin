@@ -1,6 +1,4 @@
 #DEBUG MODE, will print additional information in the console
 debug: true
 
-first_xp_milestone: "20000"
-second_xp_milestone: "30000"
-third_xp_milestone: "45000"
+max_player_exp: 150000

@@ -71,9 +71,8 @@ public class EvoDatabase {
                     "period INT(64)," +
                     "exp VARCHAR(255)," +
                     "multiplier INT(64)," +
-                    "rank INT(64)," +
                     "updated_at DATE," +
-                    "created_at DATE)", true);
+                    "created_at DATE)", false);
         }
     }
 

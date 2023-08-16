@@ -1,7 +1,7 @@
 name: EvoPlugin
 author: Palmus_
 main: fr.palmus.evoplugin.EvoPlugin
-version: 1.0
+version: 1.2
 api-version: "1.20"
 loadbefore:
   - EvoDiscord

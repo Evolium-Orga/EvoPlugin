@@ -14,16 +14,14 @@ public class PlayerPeriodChangeEvent extends Event implements Cancellable {
     private final EvoPlayer plm;
     private final EvoPlayer.PeriodAction action;
     private final int period;
-    private final int rank;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
     private boolean isCancelled;
 
-    public PlayerPeriodChangeEvent(Player pl, int period, int rank, EvoPlayer.PeriodAction action, EvoPlugin main){
+    public PlayerPeriodChangeEvent(Player pl, int period, EvoPlayer.PeriodAction action, EvoPlugin main){
         this.player = pl;
         this.plm = EvoPlayer.getInstanceOf(pl);
         this.action = action;
         this.period = period;
-        this.rank = rank;
         this.isCancelled = false;
     }
 
@@ -56,10 +54,6 @@ public class PlayerPeriodChangeEvent extends Event implements Cancellable {
 
     public int getPeriod() {
         return period;
-    }
-
-    public int getRank() {
-        return rank;
     }
 
     public EvoPlayer.PeriodAction getAction() {

@@ -4,54 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa02fae0-5658-4f6c-bf6b-ea4b3d4a69ed" name="Changes" comment="Adding README &amp; CONTRIBUTING">
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/completer/PeriodCompleter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/EvoConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_findbugs_jsr305_3_0_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_code_gson_gson_2_10.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_errorprone_error_prone_annotations_2_11_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_failureaccess_1_0_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_guava_31_1_jre.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_guava_listenablefuture_9999_0_empty_to_avoid_conflict_with_guava.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__com_google_j2objc_j2objc_annotations_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__me_clip_placeholderapi_2_11_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_luckperms_api_5_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__net_md_5_bungeecord_chat_1_16_R0_4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_checkerframework_checker_qual_3_12_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_annotations_23_0_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_joml_joml_1_10_5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_spigotmc_spigot_api_1_20_1_R0_1_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Gradle__org_yaml_snakeyaml_2_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/EvoPlugin.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/EvoPlugin.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/EvoPlugin.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/EvoPlugin.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/EvoPlugin.test.iml" afterDir="false" />
+    <list default="true" id="aa02fae0-5658-4f6c-bf6b-ea4b3d4a69ed" name="Changes" comment="Changing version">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/EvoPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/EvoPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/Logger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/Logger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/messages/Formator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/messages/Formator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/messages/Message.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/EvoPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/EvoPlayer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/PlayerData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/PlayerData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/ExpExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/ExpExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/PeriodExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/PeriodExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/completer/ExpCompleter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/completer/ExpCompleter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/economy/Economy.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/economy/EvoEconomy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/economy/EvoEconomy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/EvoScoreboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/EvoScoreboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/FastBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/FastBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/item/InventoryHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/item/InventoryHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/JoinQuitManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/JoinQuitManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerPeriodChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerPeriodChangeEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/period/PeriodCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/period/PeriodCaster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/StringConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/StringConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/DBConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/DBCredentials.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/DBCredentials.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/EvoDatabase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/EvoDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/EvoDatabase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/strings.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/strings.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,11 +97,19 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/DemiP/Desktop/Evolium/EvoPlugin/settings.gradle.kts&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/DemiP/Desktop/hysummitcore&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;JAVA&quot;
+    ]
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.EvoPlugin [shadowJar]">
     <configuration name="EvoPlugin [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -157,9 +132,17 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
+    <configuration name="Scratch" type="Java Scratch" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Scratch" />
+      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.EvoPlugin [shadowJar]" />
+        <item itemvalue="Java Scratch.Scratch" />
       </list>
     </recent_temporary>
   </component>
@@ -200,7 +183,23 @@
       <option name="project" value="LOCAL" />
       <updated>1687992564536</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Adding Database support and patching bugs">
+      <option name="closed" value="true" />
+      <created>1690045761929</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1690045761929</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Changing version">
+      <option name="closed" value="true" />
+      <created>1690045784147</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1690045784147</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -218,6 +217,8 @@
     <MESSAGE value="First Commit" />
     <MESSAGE value="Refactor of the Economy module" />
     <MESSAGE value="Adding README &amp; CONTRIBUTING" />
-    <option name="LAST_COMMIT_MESSAGE" value="Adding README &amp; CONTRIBUTING" />
+    <MESSAGE value="Adding Database support and patching bugs" />
+    <MESSAGE value="Changing version" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changing version" />
   </component>
 </project>

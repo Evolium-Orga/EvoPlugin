@@ -1,14 +1,11 @@
 package fr.palmus.evoplugin.commands;
 
 
-import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.api.messages.Message;
 import fr.palmus.evoplugin.api.messages.PrefixLevel;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
-import fr.palmus.evoplugin.enumeration.Period;
 import fr.palmus.evoplugin.fastboard.EvoScoreboard;
 import fr.palmus.evoplugin.persistance.config.StringConfig;
-import fr.palmus.evoplugin.persistance.mysql.EvoDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,8 +14,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ExpExecutor implements CommandExecutor {
-
-    EvoPlugin main = EvoPlugin.getInstance();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -33,7 +28,12 @@ public class ExpExecutor implements CommandExecutor {
         }
 
         if (args.length == 0 || args.length == 1) {
-            Message.sendPlayerMessage(player, PrefixLevel.ERROR, StringConfig.getString("commands.less_args").replace("{action}", args[0]));
+            if (args.length == 1) {
+                Message.sendPlayerMessage(player, PrefixLevel.ERROR, StringConfig.getString("commands.less_args").replace("{action}", args[0]));
+            } else {
+                Message.sendPlayerMessage(player, PrefixLevel.ERROR, StringConfig.getString("commands.less_args").replace("{action}", ""));
+            }
+
             return false;
         }
 
@@ -69,30 +69,7 @@ public class ExpExecutor implements CommandExecutor {
                 }
                 int exp = Integer.parseInt(args[2]);
                 EvoPlayer.getInstanceOf(target).setExp(exp);
-                Message.sendPlayerMessage(player, PrefixLevel.GOOD, "exp.set_successfully");
-            }
-
-            case "downgrade" -> {
-                EvoPlayer.getInstanceOf(target).periodDowngrade();
-                Message.sendPlayerMessage(player, PrefixLevel.GOOD, target.getDisplayName() + "est descendu à la période " + EvoPlayer.getInstanceOf(target).getEntirePeriodStyle());
-            }
-
-            case "upgrade" -> {
-                if (EvoPlayer.getInstanceOf(target).getPlayerPeriod() == Period.FUTUR && EvoPlayer.getInstanceOf(target).getRank() == 3) {
-                    Message.sendPlayerMessage(player, PrefixLevel.ERROR, "Ce joueur est déjà §d" + EvoPlayer.getInstanceOf(target).getEntirePeriodStyle());
-                    return false;
-                }
-                EvoPlayer.getInstanceOf(target).periodUpgrade();
-                Message.sendPlayerMessage(player, PrefixLevel.GOOD, target.getDisplayName() + "est monter à la période " + EvoPlayer.getInstanceOf(target).getEntirePeriodStyle());
-            }
-
-            case "info" -> {
-                Message.sendPlayerMessage(player, PrefixLevel.NORMAL, target.getDisplayName() + "à actuellement " + main.getPeriodCaster().formatIntegerToReadableString(EvoPlayer.getInstanceOf(target).getExp()) + " EXP §5et est à la période §d" + EvoPlayer.getInstanceOf(target).getEntirePeriodStyle());
-            }
-
-            case "reset" -> {
-                EvoPlayer.getInstanceOf(target).resetPeriod();
-                Message.sendPlayerMessage(player, PrefixLevel.GOOD, target.getDisplayName() + "c'est vu réinitialiser ses périodes et est maintenant à la période " + main.getPeriodCaster().getPeriodToString(Period.PREHISTOIRE) + " I");
+                Message.sendPlayerMessage(player, PrefixLevel.GOOD, StringConfig.getString("exp.set_successfully"));
             }
 
             default -> {

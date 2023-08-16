@@ -46,11 +46,10 @@ public class PlayerData {
                     "period INT(64)," +
                     "exp VARCHAR(255)," +
                     "multiplier INT(64)," +
-                    "rank INT(64)," +
                     "updated_at DATE," +
                     "created_at DATE)";
 
-            EvoDatabase.sendSqlRequest(createTableRequest, true);
+            EvoDatabase.sendSqlRequest(createTableRequest, false);
         }
 
         // If the player's not in the cache, we put him in
@@ -62,7 +61,7 @@ public class PlayerData {
 
         try {
             final Connection connection = database.getRawConnection();
-            final PreparedStatement preparedStatement = connection.prepareStatement("SELECT uuid, period, exp, multiplier, rank FROM player_data WHERE uuid = \"" + player.getUniqueId() + "\"");
+            final PreparedStatement preparedStatement = connection.prepareStatement("SELECT uuid, period, exp, multiplier FROM player_data WHERE uuid = \"" + player.getUniqueId() + "\"");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -82,15 +81,14 @@ public class PlayerData {
 
     private void createUserData() {
         try {
-            final PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO player_data VALUES (?, ?, ?, ?, ?, ?, ?)");
+            final PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO player_data VALUES (?, ?, ?, ?, ?, ?)");
             final long time = System.currentTimeMillis();
             preparedStatement.setString(1, player.getUniqueId().toString());
             preparedStatement.setInt(2, periodConfig.getInt(player.getUniqueId() + ".period"));
             preparedStatement.setString(3, String.valueOf(periodConfig.getInt(player.getUniqueId() + ".exp")));
             preparedStatement.setInt(4, periodConfig.getInt(player.getUniqueId() + ".multiplier"));
-            preparedStatement.setInt(5, periodConfig.getInt(player.getUniqueId() + ".rank"));
+            preparedStatement.setTimestamp(5, new Timestamp(time));
             preparedStatement.setTimestamp(6, new Timestamp(time));
-            preparedStatement.setTimestamp(7, new Timestamp(time));
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -111,12 +109,10 @@ public class PlayerData {
                 periodConfig.set(player.getUniqueId() + ".period", 0);
                 periodConfig.set(player.getUniqueId() + ".exp", 0);
                 periodConfig.set(player.getUniqueId() + ".multiplier", 0);
-                periodConfig.set(player.getUniqueId() + ".rank", 1);
             } else {
                 periodConfig.set(player.getUniqueId() + ".period", set.getInt("period"));
                 periodConfig.set(player.getUniqueId() + ".exp", Integer.parseInt(set.getString("exp")));
                 periodConfig.set(player.getUniqueId() + ".multiplier", set.getInt("multiplier"));
-                periodConfig.set(player.getUniqueId() + ".rank", set.getInt("rank"));
             }
             periodConfig.save(EvoConfig.getPeriodFile());
         } catch (SQLException | IOException e) {
@@ -130,15 +126,14 @@ public class PlayerData {
      */
     public void saveData() {
         try {
-            final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE player_data SET period = ?, exp = ?, multiplier = ?, rank = ?, updated_at = ? WHERE uuid = ?");
+            final PreparedStatement preparedStatement = connection.prepareStatement("UPDATE player_data SET period = ?, exp = ?, multiplier = ?, updated_at = ? WHERE uuid = ?");
 
             final long time = System.currentTimeMillis();
             preparedStatement.setInt(1, periodConfig.getInt(player.getUniqueId() + ".period"));
             preparedStatement.setString(2, String.valueOf(periodConfig.getInt(player.getUniqueId() + ".exp")));
             preparedStatement.setInt(3, periodConfig.getInt(player.getUniqueId() + ".multiplier"));
-            preparedStatement.setInt(4, periodConfig.getInt(player.getUniqueId() + ".rank"));
-            preparedStatement.setTimestamp(5, new Timestamp(time));
-            preparedStatement.setString(6, player.getUniqueId().toString());
+            preparedStatement.setTimestamp(4, new Timestamp(time));
+            preparedStatement.setString(5, player.getUniqueId().toString());
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {

@@ -4,7 +4,6 @@ import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.api.messages.Formator;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
 import net.luckperms.api.model.user.User;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -29,7 +28,7 @@ public class EvoScoreboard {
         FastBoard board = playerToScoreboardHashmap.get(pl.getUniqueId());
         EvoPlayer evoPlayer = EvoPlayer.getInstanceOf(pl);
 
-        int rank = evoPlayer.getRank();
+
         User user = EvoPlugin.getInstance().LPapi.getPlayerAdapter(Player.class).getUser(pl);
         String prefix;
 
@@ -39,7 +38,7 @@ public class EvoScoreboard {
             prefix = "null";
         }
 
-        String period = evoPlayer.getEntirePeriodStyle();
+        String period = evoPlayer.getStringedPlayerPeriod();
 
         int money = EvoPlayer.getInstanceOf(pl).getEconomy().getMoney();
         int bank = EvoPlayer.getInstanceOf(pl).getEconomy().getBank();
@@ -54,7 +53,7 @@ public class EvoScoreboard {
                 "",
                 "§7| §r#c4d7b2Ma Période",
                 "  §7Période actuelle: #E5F9DB" + period,
-                "  §7Points d'Expérience: #E5F9DB" + main.getPeriodCaster().formatIntegerToReadableString(evoPlayer.getExp()) + "/" + main.getPeriodCaster().getFormattedPeriodExpLimit(rank),
+                "  §7Points d'Expérience: #E5F9DB" + main.getPeriodCaster().formatIntegerToReadableString(evoPlayer.getExp()) + "/SOON",
                 "",
                 "§7| §r#c9dbb2Mon Argent",
                 "  §7Argent: #E5F9DB" + money + "§6 ⛀",
