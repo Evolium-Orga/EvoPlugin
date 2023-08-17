@@ -1,0 +1,15 @@
+prefix.error: "#83764f[#a2a378Evolium#83764f]§r §l§7| #a2a378"
+prefix.good: "#c9dbb2[#a0c49dEvolium#c9dbb2]§r §l§7| #a0c49d"
+prefix-ok: "#c4d7b2[#e3f2c1Evolium#c4d7b2]§r §l§7| #e3f2c1"
+
+commands.no_perm: "Tu n'as pas la permission d'utiliser cette commande :/"
+commands.less_args: "Usage: /commande {label} player <nombre>"
+commands.unknown_player: "Impossible de trouver le joueur spécifié ! Peut-être que le joueur est hors-ligne."
+
+exp.added_successfully: "%exp% exp ajouté avec succès à %player_name%"
+exp.subtracted_successfully: "%exp% exp retiré avec succès à %player_name%"
+exp.set_successfully: "Exp de §d%player_name% mis à jour avec succès"
+
+money.added_successfully: "%money%$ ajouté avec succès à %player_name%"
+money.subtracted_successfully: "%money%$ retiré avec succès à %player_name%"
+money.set_successfully: "Argent de §d%player_name% mis à jour avec succès"

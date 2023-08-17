@@ -3,6 +3,7 @@ package fr.palmus.evoplugin.fastboard;
 import fr.palmus.evoplugin.EvoPlugin;
 import fr.palmus.evoplugin.api.messages.Formator;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
+import fr.palmus.evoplugin.period.PeriodCaster;
 import net.luckperms.api.model.user.User;
 import org.bukkit.entity.Player;
 
@@ -40,8 +41,7 @@ public class EvoScoreboard {
 
         String period = evoPlayer.getStringedPlayerPeriod();
 
-        int money = EvoPlayer.getInstanceOf(pl).getEconomy().getMoney();
-        int bank = EvoPlayer.getInstanceOf(pl).getEconomy().getBank();
+        int money = EvoPlayer.getInstanceOf(pl).getMoney();
 
         board.updateTitle(Formator.hex("#e3f2c1PLAY.EVOLIUM.FR ☀"));
         board.updateLines(Formator.hex(
@@ -53,18 +53,18 @@ public class EvoScoreboard {
                 "",
                 "§7| §r#c4d7b2Ma Période",
                 "  §7Période actuelle: #E5F9DB" + period,
-                "  §7Points d'Expérience: #E5F9DB" + main.getPeriodCaster().formatIntegerToReadableString(evoPlayer.getExp()) + "/SOON",
+                "  §7Points d'Expérience: #E5F9DB" + PeriodCaster.formatIntegerToReadableString(evoPlayer.getExp()) + "/" + PeriodCaster.formatIntegerToReadableString(main.getConfig().getInt("max_player_exp")),
                 "",
                 "§7| §r#c9dbb2Mon Argent",
                 "  §7Argent: #E5F9DB" + money + "§6 ⛀",
-                "  §7Banque: #E5F9DB" + bank + "§6 ⛃",
+                "  §7Banque:#E5F9DB SOON§6 ⛃",
                 "",
                 ""
         ));
     }
 
     /**
-     * Make the Player linked to the plugin's scoreboard system, if not done the player's scoreboard can't be updated
+     * Make the Player linked to the plugin's scoreboard system, if not done, the player's scoreboard can't be updated
      *
      * @param pl         Player to register
      * @param scoreboard Instance of the player's scoreboard

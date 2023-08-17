@@ -1,8 +1,8 @@
 package fr.palmus.evoplugin.listeners.custom;
 
 import fr.palmus.evoplugin.EvoPlugin;
+import fr.palmus.evoplugin.api.enumeration.TransferType;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
-import fr.palmus.evoplugin.economy.EvoEconomy;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -13,18 +13,16 @@ public class PlayerMoneyChangeEvent extends Event implements Cancellable {
 
     private final Player player;
     private final EvoPlayer evoPlayer;
-    private final EvoEconomy.TransferType action;
+    private final TransferType action;
     private final int money;
-    private final int bank;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
     private boolean isCancelled;
 
-    public PlayerMoneyChangeEvent(Player pl, int money, int bank, EvoEconomy.TransferType action, EvoPlugin main){
+    public PlayerMoneyChangeEvent(Player pl, int money, TransferType action, EvoPlugin main) {
         this.player = pl;
         this.evoPlayer = EvoPlayer.getInstanceOf(pl);
         this.action = action;
         this.money = money;
-        this.bank = bank;
         this.isCancelled = false;
     }
 
@@ -59,11 +57,7 @@ public class PlayerMoneyChangeEvent extends Event implements Cancellable {
         return money;
     }
 
-    public int getBank() {
-        return bank;
-    }
-
-    public EvoEconomy.TransferType getAction() {
+    public TransferType getAction() {
         return action;
     }
 

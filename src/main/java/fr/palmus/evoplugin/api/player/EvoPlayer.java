@@ -1,10 +1,14 @@
 package fr.palmus.evoplugin.api.player;
 
 import fr.palmus.evoplugin.EvoPlugin;
-import fr.palmus.evoplugin.economy.EvoEconomy;
+import fr.palmus.evoplugin.api.enumeration.ExpAction;
+import fr.palmus.evoplugin.api.enumeration.PeriodAction;
+import fr.palmus.evoplugin.api.enumeration.TransferType;
 import fr.palmus.evoplugin.enumeration.Period;
 import fr.palmus.evoplugin.listeners.custom.PlayerExpChangeEvent;
+import fr.palmus.evoplugin.listeners.custom.PlayerMoneyChangeEvent;
 import fr.palmus.evoplugin.listeners.custom.PlayerPeriodChangeEvent;
+import fr.palmus.evoplugin.period.PeriodCaster;
 import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,8 +32,6 @@ public class EvoPlayer {
     private int experience;
 
     private Period playerPeriod;
-
-    private final EvoEconomy playerEconomy;
     private final PlayerData playerDatabaseConn;
 
     /**
@@ -41,9 +43,8 @@ public class EvoPlayer {
         this.player = player;
         this.experience = EvoConfig.getPeriodConfiguration().getInt(this.player.getUniqueId() + ".exp");
 
-        this.playerEconomy = new EvoEconomy(player);
         this.playerDatabaseConn = new PlayerData(player);
-        this.playerPeriod = main.getPeriodCaster().getEnumPeriodFromInt(EvoConfig.getPeriodConfiguration().getInt(this.player.getUniqueId() + ".period"));
+        this.playerPeriod = PeriodCaster.getEnumPeriodFromInt(EvoConfig.getPeriodConfiguration().getInt(this.player.getUniqueId() + ".period"));
 
         playerToEvoplayerHashmap.put(player, this);
     }
@@ -157,7 +158,7 @@ public class EvoPlayer {
 
         playerPeriod = Period.getNextPeriod(playerPeriod);
 
-        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", main.getPeriodCaster().getPeriodIntFromEnum(playerPeriod));
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", PeriodCaster.getPeriodIntFromEnum(playerPeriod));
 
         EvoConfig.savePeriodConfig();
 
@@ -193,7 +194,7 @@ public class EvoPlayer {
      */
     public void periodDowngrade() {
         playerPeriod = Period.getBelowPeriod(playerPeriod);
-        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", main.getPeriodCaster().getPeriodIntFromEnum(playerPeriod));
+        EvoConfig.getPeriodConfiguration().set(player.getUniqueId() + ".period", PeriodCaster.getPeriodIntFromEnum(playerPeriod));
 
         EvoConfig.savePeriodConfig();
 
@@ -237,21 +238,7 @@ public class EvoPlayer {
      * @return The period stringed.
      */
     public String getStringedPlayerPeriod() {
-        return main.getPeriodCaster().getPeriodToString(playerPeriod);
-    }
-
-    /**
-     * Enumeration for the period actions (upgrade, downgrade, reset).
-     */
-    public enum PeriodAction {
-        UPGRADE, DOWNGRADE, RESET
-    }
-
-    /**
-     * Enumeration for the experience actions (add, subtract, reset).
-     */
-    public enum ExpAction {
-        ADD, SUBTRACT, RESET
+        return PeriodCaster.getPeriodToString(playerPeriod);
     }
 
     /**
@@ -264,15 +251,107 @@ public class EvoPlayer {
     }
 
     /**
-     * Retrieves the player's economy instance to manage his money.
+     * Retrieves the database connection.
      *
-     * @return The PlayerEconomy instance of the player.
+     * @return The DtabaseConnection of the player.
      */
-    public EvoEconomy getEconomy() {
-        return playerEconomy;
-    }
-
     public PlayerData getDatabaseConnection() {
         return playerDatabaseConn;
+    }
+
+    /**
+     * Adds money to the player's balance.
+     * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
+     * @param money The amount of money to add.
+     */
+    public void addMoney(int money) {
+        main.getVault().depositPlayer(player, money);
+        PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, (int) main.getVault().getBalance(player), TransferType.MONEY, main);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * Subtracts money from the player's balance.
+     * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
+     * @param money The amount of money to subtract.
+     */
+    public void subtractMoney(int money) {
+        main.getVault().withdrawPlayer(player, money);
+        PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, (int) main.getVault().getBalance(player), TransferType.MONEY, main);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * Sets the player's money to a specific amount.
+     * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
+     * @param money The new money amount.
+     */
+    public void setMoney(int money) {
+        main.getVault().withdrawPlayer(player, main.getVault().getBalance(player));
+        main.getVault().depositPlayer(player, money);
+
+        PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, TransferType.MONEY, main);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * Adds money to the player's bank balance.
+     * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
+     * @param money The amount of money to add to the bank balance.
+     */
+    private void addBank(int money) {
+        main.getVault().bankDeposit(player.getName(), money);
+
+        PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, TransferType.BANK, main);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * Subtracts money from the player's bank balance.
+     * Triggers a PlayerMoneyChangeEvent with the updated money amount and transfer type.
+     *
+     * @param money The amount of money to subtract from the bank balance.
+     */
+    private void subtractBank(int money) {
+        main.getVault().bankWithdraw(player.getName(), money);
+
+        PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, money, TransferType.BANK, main);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * Sets the player's bank balance to a specific amount.
+     * Triggers a PlayerMoneyChangeEvent with the updated bank balance and transfer type.
+     *
+     * @param bank The new bank balance amount.
+     */
+    private void setBank(int bank) {
+        main.getVault().bankWithdraw(player.getName(), main.getVault().getBalance(player));
+        main.getVault().bankDeposit(player.getName(), bank);
+
+        PlayerMoneyChangeEvent event = new PlayerMoneyChangeEvent(player, bank, TransferType.BANK, main);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+    }
+
+    /**
+     * Returns the amount of money the player has.
+     *
+     * @return The money amount.
+     */
+    public int getMoney() {
+        return (int) main.getVault().getBalance(player);
+    }
+
+    /**
+     * Returns the amount of money in the player's bank.
+     *
+     * @return The bank balance amount.
+     */
+    private int getBank() {
+        return (int) main.getVault().bankBalance(player.getName()).balance;
     }
 }

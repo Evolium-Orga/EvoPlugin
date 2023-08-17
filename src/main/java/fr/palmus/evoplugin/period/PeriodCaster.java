@@ -18,12 +18,12 @@ public class PeriodCaster {
         return String.format("%s %s", decimalFormat.format(value), arr[index]).replace(" ", "").replace(",", ".");
     }
 
-    public Period getEnumPeriodFromInt(int i) {
+    public static Period getEnumPeriodFromInt(int i) {
 
         return Arrays.stream(Period.values()).toList().get(i);
     }
 
-    public Integer getPeriodIntFromEnum(Period desiredPeriod) {
+    public static Integer getPeriodIntFromEnum(Period desiredPeriod) {
 
         int i = 0;
 
@@ -36,7 +36,7 @@ public class PeriodCaster {
         return null;
     }
 
-    public String getPeriodToString(Period period) {
+    public static String getPeriodToString(Period period) {
 
         return period.toString().toLowerCase().substring(0, 1).toUpperCase() + period.toString().substring(1);
     }

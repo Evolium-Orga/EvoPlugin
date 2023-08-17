@@ -43,13 +43,21 @@ public class ExpExecutor implements CommandExecutor {
         }
 
         Player target = Bukkit.getPlayer(args[1]);
+        int exp = 0;
 
         switch (args[0]) {
             case "add" -> {
                 if (args.length == 2) {
                     Message.sendPlayerMessage(player, PrefixLevel.ERROR, StringConfig.getString("commands.less_args").replace("{label}", args[0]) + "exp");
+                    return true;
                 }
-                int exp = Integer.parseInt(args[2]);
+
+                try {
+                    exp = Integer.parseInt(args[2]);
+                }catch (NumberFormatException e) {
+                    Message.sendPlayerMessage(player, PrefixLevel.ERROR, "Le nombre que vous avez précisé est beaucoup trop grand ou contient des caractères innatendus");
+                }
+
                 EvoPlayer.getInstanceOf(target).addExp(exp);
                 Message.sendPlayerMessage(player, PrefixLevel.GOOD, StringConfig.getString("exp.added_successfully").replace("%exp%", String.valueOf(exp)));
             }
@@ -57,8 +65,15 @@ public class ExpExecutor implements CommandExecutor {
             case "subtract" -> {
                 if (args.length == 2) {
                     Message.sendPlayerMessage(player, PrefixLevel.ERROR, StringConfig.getString("commands.less_args").replace("{label}", args[0]) + "exp");
+                    return true;
                 }
-                int exp = Integer.parseInt(args[2]);
+
+                try {
+                    exp = Integer.parseInt(args[2]);
+                }catch (NumberFormatException e) {
+                    Message.sendPlayerMessage(player, PrefixLevel.ERROR, "Le nombre que vous avez précisé est beaucoup trop grand ou contient des caractères innatendus");
+                }
+
                 EvoPlayer.getInstanceOf(target).addExp(-exp);
                 Message.sendPlayerMessage(player, PrefixLevel.GOOD, StringConfig.getString("exp.subtracted_successfully").replace("%exp%", String.valueOf(exp)));
             }
@@ -66,8 +81,15 @@ public class ExpExecutor implements CommandExecutor {
             case "set" -> {
                 if (args.length == 2) {
                     Message.sendPlayerMessage(player, PrefixLevel.ERROR, StringConfig.getString("commands.less_args").replace("{label}", args[0]) + "exp");
+                    return true;
                 }
-                int exp = Integer.parseInt(args[2]);
+
+                try {
+                    exp = Integer.parseInt(args[2]);
+                }catch (NumberFormatException e) {
+                    Message.sendPlayerMessage(player, PrefixLevel.ERROR, "Le nombre que vous avez précisé est beaucoup trop grand ou contient des caractères innatendus");
+                }
+
                 EvoPlayer.getInstanceOf(target).setExp(exp);
                 Message.sendPlayerMessage(player, PrefixLevel.GOOD, StringConfig.getString("exp.set_successfully"));
             }

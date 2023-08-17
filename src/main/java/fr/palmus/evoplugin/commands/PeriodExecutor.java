@@ -7,6 +7,7 @@ import fr.palmus.evoplugin.api.messages.PrefixLevel;
 import fr.palmus.evoplugin.api.player.EvoPlayer;
 import fr.palmus.evoplugin.enumeration.Period;
 import fr.palmus.evoplugin.fastboard.EvoScoreboard;
+import fr.palmus.evoplugin.period.PeriodCaster;
 import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import fr.palmus.evoplugin.persistance.config.StringConfig;
 import fr.palmus.evoplugin.persistance.mysql.EvoDatabase;
@@ -86,12 +87,12 @@ public class PeriodExecutor implements CommandExecutor {
                 Message.sendPlayerMessage(player, PrefixLevel.GOOD, target.getDisplayName() + " est monter à la période " + EvoPlayer.getInstanceOf(target).getStringedPlayerPeriod());
             }
 
-            case "info" -> Message.sendPlayerMessage(player, PrefixLevel.NORMAL, target.getDisplayName() + " à actuellement " + main.getPeriodCaster().formatIntegerToReadableString(EvoPlayer.getInstanceOf(target).getExp()) + " EXP et est à la période " + EvoPlayer.getInstanceOf(target).getStringedPlayerPeriod());
+            case "info" -> Message.sendPlayerMessage(player, PrefixLevel.NORMAL, target.getDisplayName() + " à actuellement " + PeriodCaster.formatIntegerToReadableString(EvoPlayer.getInstanceOf(target).getExp()) + " EXP et est à la période " + EvoPlayer.getInstanceOf(target).getStringedPlayerPeriod());
 
             case "reset" -> {
                 if (checkPerms(player)) return false;
                 EvoPlayer.getInstanceOf(target).resetPeriod();
-                Message.sendPlayerMessage(player, PrefixLevel.GOOD, target.getDisplayName() + " c'est vu réinitialiser ses périodes et est maintenant à la période " + main.getPeriodCaster().getPeriodToString(Period.PREHISTOIRE));
+                Message.sendPlayerMessage(player, PrefixLevel.GOOD, target.getDisplayName() + " c'est vu réinitialiser ses périodes et est maintenant à la période " + PeriodCaster.getPeriodToString(Period.PREHISTOIRE));
             }
 
             default -> {

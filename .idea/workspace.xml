@@ -4,21 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa02fae0-5658-4f6c-bf6b-ea4b3d4a69ed" name="Changes" comment="Changing version">
+    <list default="true" id="aa02fae0-5658-4f6c-bf6b-ea4b3d4a69ed" name="Changes" comment="v1.2: Rework du système d'exp et des limiter">
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/enumeration/ExpAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/enumeration/PeriodAction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/enumeration/TransferType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/completer/EconCompleter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/lang.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/EvoPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/EvoPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/EvoPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/EvoPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/PlayerData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/PlayerData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/EconExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/EconExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/ExpExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/ExpExecutor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/PeriodExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/PeriodExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/economy/EvoEconomy.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/EvoScoreboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/EvoScoreboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/item/InventoryHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/item/InventoryHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/JoinQuitManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/JoinQuitManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerExpChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerExpChangeEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerMoneyChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerMoneyChangeEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerPeriodChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerPeriodChangeEvent.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/period/PeriodCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/period/PeriodCaster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/EvoDatabase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/mysql/EvoDatabase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/StringConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/StringConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/strings.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +76,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>

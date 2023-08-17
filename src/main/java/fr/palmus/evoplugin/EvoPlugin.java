@@ -5,16 +5,17 @@ import fr.palmus.evoplugin.api.player.EvoPlayer;
 import fr.palmus.evoplugin.commands.EconExecutor;
 import fr.palmus.evoplugin.commands.ExpExecutor;
 import fr.palmus.evoplugin.commands.PeriodExecutor;
+import fr.palmus.evoplugin.commands.completer.EconCompleter;
 import fr.palmus.evoplugin.commands.completer.ExpCompleter;
 import fr.palmus.evoplugin.commands.completer.PeriodCompleter;
 import fr.palmus.evoplugin.fastboard.EvoScoreboard;
 import fr.palmus.evoplugin.fastboard.FastBoard;
 import fr.palmus.evoplugin.listeners.*;
-import fr.palmus.evoplugin.period.PeriodCaster;
 import fr.palmus.evoplugin.persistance.config.EvoConfig;
 import fr.palmus.evoplugin.persistance.config.StringConfig;
 import fr.palmus.evoplugin.persistance.mysql.EvoDatabase;
 import net.luckperms.api.LuckPerms;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class EvoPlugin extends JavaPlugin {
 
     public boolean safeInitialized = true;
 
-    private PeriodCaster periodCaster;
+    private Economy vault;
 
     private RegisteredServiceProvider<LuckPerms> provider;
     public LuckPerms LPapi;
@@ -50,8 +51,8 @@ public class EvoPlugin extends JavaPlugin {
 
         DEBUG_MODE = getConfig().getBoolean("debug");
 
-        EvoConfig.initializeConfigFile();
         try {
+            EvoConfig.initializeConfigFile();
             StringConfig.load();
         } catch (IOException e) {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Error while enabling configurations files, FATAL");
@@ -80,6 +81,10 @@ public class EvoPlugin extends JavaPlugin {
             customLogger.debug(ChatColor.GREEN + "LuckPerms Hooked !");
         }
 
+        if (setupEconomy()) {
+            customLogger.debug(ChatColor.GREEN + "Vault Hooked !");
+        }
+
         setCommands();
         setListeners();
         setTabCompleter();
@@ -92,7 +97,6 @@ public class EvoPlugin extends JavaPlugin {
             EvoPlayer evoPlayer = EvoPlayer.getInstanceOf(pl);
 
             evoPlayer.getDatabaseConnection().registerPlayerOnDatabase();
-            EvoPlayer.getInstanceOf(pl).getEconomy().initPlayerEcon();
             EvoPlayer.recreateInstanceOf(pl);
 
             FastBoard boards = new FastBoard(pl);
@@ -121,7 +125,6 @@ public class EvoPlugin extends JavaPlugin {
             EvoPlayer evoPlayer = EvoPlayer.getInstanceOf(pl);
 
             evoPlayer.saveCache();
-            evoPlayer.getEconomy().saveMoney();
         }
         customLogger.debug(ChatColor.GREEN + "All player's data successfully saved in cache file");
 
@@ -151,6 +154,7 @@ public class EvoPlugin extends JavaPlugin {
 
     private void setTabCompleter() {
         getCommand("exp").setTabCompleter(new ExpCompleter());
+        getCommand("money").setTabCompleter(new EconCompleter());
         getCommand("period").setTabCompleter(new PeriodCompleter());
     }
 
@@ -168,23 +172,32 @@ public class EvoPlugin extends JavaPlugin {
         return INSTANCE;
     }
 
-    public PeriodCaster getPeriodCaster() {
-        if (periodCaster == null) {
-            periodCaster = new PeriodCaster();
-        }
-        return periodCaster;
-    }
-
     public Logger getCustomLogger() {
         return customLogger;
     }
 
     public void checkSafeInitialization() {
         if (!safeInitialized) {
-            customLogger.log(ChatColor.RED + "Failed to load Evolium, see above this messaage for error report !");
+            customLogger.log(ChatColor.RED + "Failed to load Evolium, see above this message for error report !");
             getPluginLoader().disablePlugin(this);
             return;
         }
         customLogger.log(ChatColor.GREEN + "Plugin enabled !");
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        vault = rsp.getProvider();
+        return vault != null;
+    }
+
+    public Economy getVault() {
+        return vault;
     }
 }

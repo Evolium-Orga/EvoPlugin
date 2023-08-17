@@ -25,13 +25,12 @@ public class JoinQuitManager implements Listener {
         EvoPlayer evoPlayer = EvoPlayer.getInstanceOf(pl);
 
         evoPlayer.getDatabaseConnection().registerPlayerOnDatabase();
-        evoPlayer = EvoPlayer.recreateInstanceOf(pl);
+        EvoPlayer.recreateInstanceOf(pl);
 
         if(pl.hasPermission("minecraft.command.gamemode")){
             Bukkit.getScheduler().scheduleSyncDelayedTask(main, () -> pl.setGameMode(GameMode.CREATIVE), 20);
         }
 
-        evoPlayer.getEconomy().initPlayerEcon();
         FastBoard board = new FastBoard(pl);
 
         EvoScoreboard.getPlayerToScoreboardHashmap().put(pl.getUniqueId(), board);
@@ -50,7 +49,6 @@ public class JoinQuitManager implements Listener {
         }
 
         evoPlayer.saveCache();
-        evoPlayer.getEconomy().initPlayerEcon();
 
         EvoConfig.getPeriodConfiguration().save(EvoConfig.getPeriodFile());
         evoPlayer.getDatabaseConnection().saveData();
