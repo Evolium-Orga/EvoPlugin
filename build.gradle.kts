@@ -1,14 +1,10 @@
 plugins {
     id("java")
-    id("maven-publish")
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-group = "fr.palmus.evoplugin"
-version = "1.2.1"
-
-val RepoUsername = providers.gradleProperty("repsyUsername")
-val RepoPassword = providers.gradleProperty("repsyPassword")
+group = "net.evolium.evoshop"
+version = "1.0"
 
 repositories {
     maven {
@@ -20,8 +16,8 @@ repositories {
     }
     maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots") }
     maven { url = uri("https://oss.sonatype.org/content/repositories/central") }
-    maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
-    maven { url = uri("https://jitpack.io") }
+    maven { url = uri("https://maven.citizensnpcs.co/repo") }
+    maven { url = uri("https://repo.repsy.io/mvn/palmus/evoplugin") }
 
     mavenCentral()
     mavenLocal()
@@ -29,10 +25,11 @@ repositories {
 
 dependencies {
     implementation("org.spigotmc:spigot-api:1.20.1-R0.1-SNAPSHOT")
-    implementation("org.jetbrains:annotations:24.0.0")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
-    compileOnly("net.luckperms:api:5.4")
-    compileOnly("me.clip:placeholderapi:2.11.3")
+    implementation("fr.palmus.evoplugin:EvoPlugin:1.2.1")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.30-SNAPSHOT") {
+        exclude("*","*")
+    }
+
 }
 
 tasks.shadowJar {
@@ -43,22 +40,4 @@ tasks.shadowJar {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-        }
-
-        repositories {
-            maven {
-                url = uri("https://repo.repsy.io/mvn/palmus/evoplugin")
-                credentials {
-                    username = RepoUsername.orNull
-                    password = RepoPassword.orNull
-                }
-            }
-        }
-    }
 }
