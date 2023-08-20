@@ -1,49 +1,30 @@
-# EvoDefault
+# EvoPlugin
 
-Le plugin BaseTemplate sert de point de départ pour développer des plugins Bukkit en Java. Il fournit une structure de modèle de base et des composants essentiels pour vous aider à démarrer rapidement.
+## Description
 
-## Pour commencer
+EvoPlugin is a powerful and versatile plugin designed specifically for the Evolium server. It serves as the backbone of the server, providing essential functionalities such as database management, economy systems, and era progression. This plugin also includes a comprehensive API that developers can utilize to access and manipulate player data.
 
-Pour utiliser le plugin EvoDefault, suivez ces étapes :
+## Features
 
-Clonez le dépôt ou téléchargez le code source sur votre machine locale.
-Configurez votre environnement de développement avec les dépendances et les bibliothèques requises.
-Importez le projet dans votre IDE Java préféré (par exemple, IntelliJ IDEA, Eclipse). Nous recommandons l'utilisation d'IntelliJ IDEA !
-Mettez à jour les références du nom du plugin dans les fichiers suivants :
-settings.gradle
-build.gradle.kts
-plugin.yml
-Personnalisez le plugin en fonction de vos besoins spécifiques. Apportez des modifications au code fourni ou ajoutez vos propres classes pour étendre les fonctionnalités.
-Une fois la configuration terminée, remplacez le contenu de ce fichier par le contenu de "README-plugin.md" et supprimez ce dernier.
+- **Database Management**: EvoPlugin efficiently handles the storage and retrieval of player data, ensuring a smooth and reliable gaming experience.
+- **Economy System**: This plugin integrates a robust economy system, allowing players to engage in trade, commerce, and resource management. Developers can implement item pricing mechanisms and monitor in-game transactions.
+- **Period Progression**: EvoPlugin incorporates an innovative period system, enabling the server to evolve and progress through different time periods. This feature adds depth and immersion to the gameplay, offering unique challenges and opportunities as players advance through the periods.
+- **API Integration**: The plugin provides a comprehensive API that allows developers to seamlessly interact with player data, including statistics, inventories, and achievements. This integration empowers developers to create custom features and enhance the gameplay experience.
 
-## Règles de codage
+## Installation & Usage
 
-Lorsque vous travaillezavec EvoDefault, veuillez respecter les règles et les conventions de codage suivantes :
+For more Information about how to install and use the API that EvoPlugin's providing see the wiki
 
-**Nom des packages** : Les packages doivent être nommés en minuscules avec des mots séparés par des points. Par exemple : fr.evolium.evodefault
+## Contribution
 
-**Nom des classes** : Les noms de classe doivent suivre la notation PascalCase (UpperCamelCase), en commençant par une lettre majuscule. Par exemple : BaseTemplate, ExampleExecutor, JoinManager.
+We welcome contributions from the community to improve EvoPlugin. If you have any suggestions, bug reports, or would like to contribute to the project, please follow our guidelines for contributing as outlined in the CONTRIBUTING.md file.
 
-**Nom des variables** : Les variables doivent utiliser la notation camelCase en commençant par une lettre minuscule. Par exemple : logger, formator, pm.
+## Support
 
-**Nom des constantes** : Les constantes doivent être en majuscules avec des mots séparés par des underscores. Par exemple : WELCOME_MESSAGE, DEBUG_MODE.
+For any questions, issues, or support related to EvoPlugin, please join our Discord community or visit our support forum. Our dedicated team will be happy to assist you.
 
-**Indentation et formatage** : Utilisez une indentation cohérente (espaces plutôt que des tabulations) pour améliorer la lisibilité du code. Respectez des règles de formatage cohérentes, telles que placer les accolades ouvrantes sur la même ligne que la déclaration de méthode ou de classe correspondante.
+## License
 
-**Commentaires** : Incluez des commentaires pour expliquer le but et la fonctionnalité des classes, des méthodes et des sections de code importantes. Les commentaires doivent être clairs, concis et fournir des informations utiles.
+EvoPlugin is released under the [MIT License](https://opensource.org/licenses/MIT). Please refer to the LICENSE.md file for more details.
 
-**Gestion des erreurs** : Mettez en place une gestion appropriée des erreurs en utilisant des blocs try-catch ou en propageant les exceptions au niveau approprié.
-Utilisation de final et static : Utilisez le mot-clé final pour les variables constantes et le mot-clé static pour les variables et les méthodes de niveau de classe, lorsque cela est approprié.
-
-**Organisation du code** : Regroupez le code connexe ensemble ! Seule la classe principale devrait être à la racine du plugin. Utilisez les modificateurs d'accès appropriés (public, private) pour contrôler la visibilité et l'accessibilité des membres de classe.
-
-**Convention de nommage des méthodes** : Les noms de méthodes doivent utiliser la notation camelCase et être descriptifs de leur objectif. Par exemple : onEnable, onDisable, setCommands, loadConfigFiles.
-Veuillez garder ces règles de codage à l'esprit lorsque vous travaillez sur votre plugin pour maintenir la cohérence et la lisibilité du code.
-
-## Problème connu
-
-Si vous rencontrez une erreur lors du chargement du projet Gradle indiquant "Unsupported class file major version 64" et si définir votre JDK de projet sur 17 ne résout pas ce problème, cela signifie probablement que vos paramètres Gradle tentent d'utiliser Java 20. Vous pouvez résoudre ce problème en cliquant sur Gradle -> la petite roue dentée -> Paramètres Gradle et en définissant "Gradle JVM" sur 17.
-
-##Contribution
-
-Si vous rencontrez des problèmes, avez des suggestions ou souhaitez contribuer au projet, n'hésitez pas à ouvrir une demande ou à soumettre une demande de modification. Vos contributions sont grandement appréciées !
+---

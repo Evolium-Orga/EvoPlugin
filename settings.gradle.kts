@@ -1,2 +1,2 @@
-rootProject.name = "EvoShop"
+rootProject.name = "EvoPlugin"
 

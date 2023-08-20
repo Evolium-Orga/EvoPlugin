@@ -1,1 +1,4 @@
-chat_color: "#abf7cf"
+#DEBUG MODE, will print additional information in the console
+debug: true
+
+max_player_exp: 150000

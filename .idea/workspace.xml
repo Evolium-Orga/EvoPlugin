@@ -4,29 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa02fae0-5658-4f6c-bf6b-ea4b3d4a69ed" name="Changes" comment="v1.2: Rework du système d'exp et des limiter">
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/enumeration/ExpAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/enumeration/PeriodAction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/enumeration/TransferType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/completer/EconCompleter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/lang.yml" afterDir="false" />
+    <list default="true" id="aa02fae0-5658-4f6c-bf6b-ea4b3d4a69ed" name="Changes" comment="v1.2.1: Implementation de Vault pour l'économie TODO: UTF-8 formatting for yml">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/EvoPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/EvoPlugin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/EvoPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/api/player/EvoPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/EconExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/EconExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/ExpExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/ExpExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/PeriodExecutor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/commands/PeriodExecutor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/economy/EvoEconomy.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/EvoScoreboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/fastboard/EvoScoreboard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/JoinQuitManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/JoinQuitManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerExpChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerExpChangeEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerMoneyChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerMoneyChangeEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerPeriodChangeEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/listeners/custom/PlayerPeriodChangeEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/period/PeriodCaster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/period/PeriodCaster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/StringConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/fr/palmus/evoplugin/persistance/config/StringConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/strings.properties" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,9 +87,9 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/DemiP/Desktop/hysummitcore&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
+    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;
   },
   &quot;keyToStringList&quot;: {
     &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
@@ -208,7 +187,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690045784147</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="v1.2.1: Implementation de Vault pour l'économie TODO: UTF-8 formatting for yml">
+      <option name="closed" value="true" />
+      <created>1692277686004</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1692277686004</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -228,6 +215,11 @@
     <MESSAGE value="Adding README &amp; CONTRIBUTING" />
     <MESSAGE value="Adding Database support and patching bugs" />
     <MESSAGE value="Changing version" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changing version" />
+    <MESSAGE value="v1.2.1: Implementation de Vault pour l'économie TODO: UTF-8 formatting for yml" />
+    <option name="LAST_COMMIT_MESSAGE" value="v1.2.1: Implementation de Vault pour l'économie TODO: UTF-8 formatting for yml" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

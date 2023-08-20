@@ -1,8 +1,50 @@
-main: net.evolium.evoshop.Main
-name: EvoShop
-version: '${version}'
-description: ""
-author: MawBread
-depend:
-  - Citizens
+name: EvoPlugin
+author: Palmus_
+main: fr.palmus.evoplugin.EvoPlugin
+version: 1.2.1
 api-version: "1.20"
+loadbefore:
+  - EvoDiscord
+libraries:
+  - org.mariadb.jdbc:mariadb-java-client:3.0.6
+depend:
+  - LuckPerms
+  - PlaceholderAPI
+  - Vault
+commands:
+  exp:
+    description: Interact with the exp moderation commands
+    default: op
+    usage: /exp add|set|downgrade|upgrade|infos
+    permission: evoplugin.exp_mod
+
+  money:
+    description:  Access the economy module
+    permission: evoplugin.econ_mod
+
+  period:
+    description: Access information about periods
+    aliases:
+      - periodes
+      - periode
+      - era
+      - eras
+
+  bank:
+    description: Montre l'argent d'un joueur
+
+permissions:
+  evoplugin.*:
+    description: Administrator permissions.
+    children:
+      evoplugin.exp_mod: true
+      evoplugin.econ_mod: true
+
+  evoplugin.exp_mod:
+    description: Access to exp moderation commands
+    default: op
+
+  evoplugin.econ_mod:
+    description: Access to economy moderation commands
+    default: op
+
